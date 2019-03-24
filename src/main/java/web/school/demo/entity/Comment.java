@@ -1,5 +1,7 @@
 package web.school.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -18,14 +20,17 @@ public class Comment {
 
     private Integer LikeNums;
 
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "topicId")
     private BSTopic topic;
 
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
     @JoinColumn(name = "userId")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "answerId")
     private Answer answer;

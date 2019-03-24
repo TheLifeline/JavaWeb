@@ -1,5 +1,7 @@
 package web.school.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -17,6 +19,7 @@ public class BSTopic {
 
     private Integer TopicClickCount;
 
+    @Column(nullable = false)
     private String Topic;
 
     @Lob
@@ -26,11 +29,11 @@ public class BSTopic {
     @Column(columnDefinition = "TIMESTAMP",nullable = false)
     private Timestamp TopicTime;
 
-
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
     @JoinColumn(name="userId")
     private User user;
-
+    
     @OneToMany(mappedBy = "topic",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     private List<Comment> commentList;
 

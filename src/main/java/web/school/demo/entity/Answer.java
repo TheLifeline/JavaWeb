@@ -1,5 +1,7 @@
 package web.school.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class Answer {
     @Column(nullable = false)
     private String AnswerContents;
 
+    @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
     @JoinColumn(name="ProblemId")
     private Problem problem;
