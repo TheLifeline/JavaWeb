@@ -36,7 +36,7 @@
         data(){
             return {
                 data:[{
-                    id:null,
+                    id:1,
                     topic:'题目',
                     likeNums:102,
                     topicTime:'2019.1.14',

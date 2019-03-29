@@ -33,8 +33,8 @@
                         <div style="margin:20px 0"><el-button type="primary">评论</el-button></div>
 
                         <div>
-                            <div style="color: #8a9aa9">谁谁谁说:</div>
-                            <div style="margin-left:20px">我说了好多内容</div>
+                            <div style="color: #8a9aa9" >{{data.name}}</div>
+                            <div style="margin-left:20px" >{{data.comments}}</div>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,9 @@
                     topic:'题目',
                     topicTime:'2019.1.14',
                     createUser:'小明',
-                    topicContents:"....."
+                    topicContents:".....",
+                    comments:"我说了好多内容",
+                    name:"谁谁谁"
                 },
                 console:console
             }
