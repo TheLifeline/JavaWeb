@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import web.school.demo.comment.dto.BaseResultFactory;
 import web.school.demo.entity.BSTopic;
 import web.school.demo.repository.TopicRepository;
 
 import java.util.*;
 
 @RestController
+@CrossOrigin
 public class TopicController {
     @Autowired
     TopicRepository topicRepository;
@@ -29,7 +31,7 @@ public class TopicController {
             midMap.put("topicReplyCount",bsTopic.getTopicReplyCount().toString());
             result.add(midMap);
         }
-        return new ResponseEntity<List>(result, HttpStatus.OK) ;
+        return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
     }
 
     @CrossOrigin
@@ -42,6 +44,6 @@ public class TopicController {
         result.put("topicContents",bsTopic.getTopicContents());
         result.put("topicTime",bsTopic.getTopicTime().toString());
         result.put("createUser",bsTopic.getUser().getUserName());
-        return new ResponseEntity<>(result, HttpStatus.OK) ;
+        return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
     }
 }

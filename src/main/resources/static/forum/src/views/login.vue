@@ -18,14 +18,14 @@
       <el-card>
         <el-form>
           <el-form-item label="账号">
-            <el-input placeholder="请输入账号" v-model="username"></el-input>
+            <el-input placeholder="请输入账号" v-model="user_data.username"></el-input>
           </el-form-item>
           <el-form-item label="密码">
             <el-input
               @keydown.native.enter="login"
               placeholder="请输入密码"
               type="password"
-              v-model="password"
+              v-model="user_data.password"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -40,58 +40,45 @@
 </template>
 
 <script>
-// export default {
-//     name:'login',
-//     data() {
-//         return {
-//             username: "",
-//             password: ""
-//         };
-//     },
-//     methods:{
-//         handleJumpIndex(){
-//             this.$router.push('/')
-//         }
-//     }
-// }
 export default {
     name:'login',
     data() {
         return {
-        username: "",
-        password: "",
+          user_data: {
+            username: "",
+            password: ""
+          },
         console:console
         };
     },
     methods: {
         login() {
         // this.console.log("执行登录操作");
-        if (!this.username.trim() || !this.password.trim())
+        if (!this.user_data.username.trim() || !this.user_data.password.trim())
             return this.$message({
             message: "请输入用户名或密码!",
             type: "warning"
             });
+
         return (
-            this.$axios.post("http://localhost:8081/user/login",{username:this.username,password:this.password})
-            .then(result => {
-                // localStorage.setItem("token", result.data.data.token);
-                // localStorage.setItem("userInfo", JSON.stringify(result.data.data));
-                // 登录成功提醒用户
-                // alert("登陆成功");
-                // 将Token存储到localStorage
-                this.$message({
-                message: result.data.succMsg,
-                type: "success"
-                });
-                // 登录成功跳转到首页
-                this.$router.push("/");
-            })
-            // .then的回调函数有两个, 第一个是成功的, 第二个是失败的
-            // 但是如果失败了也会报错, 通过.catch也可以进行捕获
-            .catch(err => {
-                // console.log(error.response.data.errMsg);
-                this.$message.error(err.data);
-            })
+          this.$axios.post("http://localhost:8081/user/login",this.user_data)
+                  .then(result => {
+                      localStorage.setItem("token", result.data.data.token);
+                      // 将Token存储到localStorage
+                      this.$message({
+                        message:result.data.msg
+                      });
+                      // 登录成功跳转到首页
+                      this.$router.push("/");
+                  })
+                  .catch(error => {
+                    if(error.response){
+                      this.$message({
+                        message:error.response.data.msg,
+                        type:"warning"
+                      });
+                    }
+                  })
         );
         },
         handleJumpIndex(){

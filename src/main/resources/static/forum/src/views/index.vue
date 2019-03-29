@@ -61,11 +61,21 @@
             },
             getAllTopic(){
                 this.$axios.get(
-                    "http://localhost:8081/topic"
+                    "http://localhost:8081/topic",{
+                        headers: {
+                        'Authorization': localStorage.getItem('token')
+                        }
+                    }
                 ).then(res =>{
-                    this.data=res.data
-                }).catch(error =>{
-                    this.console.log(error)
+                    this.data=res.data.data
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
                 });
             }
         }

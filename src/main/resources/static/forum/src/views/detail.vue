@@ -65,14 +65,18 @@
             getDetail(){
                 this.$axios.get(
                     "http://localhost:8081/detail",{
-                        params: {
-                        id: this.id
-                        }
+                        params: {id: this.id}
                     }
                 ).then(res =>{
-                    this.data=res.data
-                }).catch(error =>{
-                    this.console.log(error)
+                    this.data=res.data.data
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
                 });
             },
             postForum(){
