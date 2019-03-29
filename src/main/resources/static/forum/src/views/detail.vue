@@ -29,7 +29,7 @@
                 </div>
                 <div>
                     <div style="width:90%; background-color: #fafbfc; padding:20px; margin:0 auto">
-                        <el-input placeholder="输入评论"></el-input>
+                        <el-input placeholder="输入评论">{{data.input}}</el-input>
                         <div style="margin:20px 0"><el-button type="primary">评论</el-button></div>
 
                         <div>
@@ -66,8 +66,12 @@
         methods:{
             getDetail(){
                 this.$axios.get(
-                    "http://localhost:8081/detail",{
-                        params: {id: this.id}
+                    "http://localhost:8081/detail",
+                    {
+                        params: {id: this.id},
+                        headers: {
+                        'Authorization': localStorage.getItem('token')
+                        }
                     }
                 ).then(res =>{
                     this.data=res.data.data

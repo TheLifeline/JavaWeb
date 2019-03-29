@@ -23,15 +23,13 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static Claims checkToken(String token) throws ServletException {
+    public static Claims checkToken(String token) {
         try {
             final Claims claims = Jwts.parser().setSigningKey(base64EncodedSecretKey).parseClaimsJws(token).getBody();
             return claims;
         }catch (ExpiredJwtException e1) {
             throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR,"出错了");
-//            throw new ServletException("token expired");
         } catch (Exception e) {
-//            throw new ServletException("other token exception");
             throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR,"出错了");
         }
     }
