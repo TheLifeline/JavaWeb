@@ -30,14 +30,14 @@ router.beforeEach((to, from, next) => {
   // console.log(to, from)
   // 如果添加了导航守卫的回调函数
   // 必须调用next函数  将其引导到某个页面, 如果不传参数就是不干预路由跳转
-  let token = localStorage.getItem('token')
+  // let token = localStorage.getItem('token')
   if (to.path == '/'){
     return next()
   }
-  if (!token && to.path !== '/login') {
-    // console.log('我在疯狂的进login')
-    return next('/login')
-  }
+  // if (!token && to.path !== '/login') {
+  //   // console.log('我在疯狂的进login')
+  //   return next('/login')
+  // }
   next()
 })
 
