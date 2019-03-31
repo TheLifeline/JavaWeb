@@ -6,8 +6,12 @@
                     <div class="header-l">
                         <h1>云论坛</h1>
                     </div>
-                    <div class="header-r">
-                        <!-- <el-button>登录</el-button> -->
+                    <div class="header-r" v-if="!isLogin">
+                        <el-button @click="handleLogin">登录</el-button>
+                        <el-button @click="postForum">发帖子</el-button>
+                    </div>
+                    <div class="header-r" v-else>
+                        <el-button @click="LoginOut">登出</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </div>
                 </div>
@@ -29,7 +33,7 @@
                 </div>
                 <div>
                     <div style="width:90%; background-color: #fafbfc; padding:20px; margin:0 auto">
-                        <el-input placeholder="输入评论">{{data.input}}</el-input>
+                        <el-input placeholder="输入评论" v-model="data.input"></el-input>
                         <div style="margin:20px 0"><el-button type="primary">评论</el-button></div>
 
                         <div>
@@ -49,18 +53,21 @@
         data(){
             return {
                 id:this.$route.query.id,
+                isLogin:false,
                 data:{
                     topic:'题目',
                     topicTime:'2019.1.14',
                     createUser:'小明',
                     topicContents:".....",
                     comments:"我说了好多内容",
-                    name:"谁谁谁"
+                    name:"谁谁谁",
+                    input:""
                 },
                 console:console
             }
         },
         mounted (){
+            this.isLogined(),
             this.getDetail()
         },
         methods:{
@@ -87,6 +94,60 @@
             },
             postForum(){
                 this.$router.push('/postForum')
+            },
+            postComment(){
+                this.$axios.post(
+                    "http://localhost:8081/comment",
+                    {
+                        params: {id: this.id},
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        },
+
+                    }
+                ).then(res =>{
+                    this.data=res.data.data
+                })
+                    .catch(error => {
+                        if(error.response){
+                            this.$message({
+                                message:error.response.data.msg,
+                                type:"warning"
+                            });
+                        }
+                    });
+            },
+            isLogined(){
+                this.$axios.get(
+                    "http://localhost:8081/islogin",{
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    }
+                ).then(res =>{
+                    if(res.data.data){
+                        this.isLogin=res.data.data
+                    }else {
+                        this.$message({
+                            message:res.data.msg,
+                            type:"warning"
+                        });
+                    }
+                }).catch(error => {
+                        if(error.response){
+                            this.$message({
+                                message:error.response.data.msg,
+                                type:"warning"
+                            });
+                        }
+                    });
+            },
+            LoginOut(){
+                this.$message({
+                    message:"success!"
+                });
+                this.isLogin=false
+                localStorage.clear()
             }
         }
     }

@@ -11,7 +11,7 @@
                         <el-button @click="postForum">发帖子</el-button>
                     </div>
                     <div class="header-r" v-else>
-                        <el-button @click="handleLogin">登出</el-button>
+                        <el-button @click="LoginOut">登出</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </div>
                 </div>
@@ -47,19 +47,12 @@
                     topicTime:'2019.1.14',
                     createUser:'小明',
                     topicReplyCount:20
-                },{
-                    id:1,
-                    topic:'题目',
-                    likeNums:102,
-                    topicTime:'2019.1.14',
-                    createUser:'小明',
-                    topicReplyCount:20
                 }],
                 console:console
             }
         },
         mounted(){
-            this.isLogined()
+            this.isLogined(),
             this.getAllTopic()
         },
         methods:{
@@ -91,7 +84,7 @@
                     }
                 });
             },
-            isLogined(){
+            isLogined: function(){
                 this.$axios.get(
                     "http://localhost:8081/islogin",{
                         headers: {
@@ -99,7 +92,14 @@
                         }
                     }
                 ).then(res =>{
-                    this.data.isLogin=res.data.data
+                    if(res.data.data){
+                        this.isLogin=res.data.data
+                    }else {
+                        this.$message({
+                            message:res.data.msg,
+                            type:"warning"
+                        });
+                    }
                 })
                 .catch(error => {
                     if(error.response){
@@ -109,6 +109,13 @@
                         });
                     }
                 });
+            },
+            LoginOut(){
+                this.$message({
+                    message:"success!"
+                });
+                this.isLogin=false
+                localStorage.clear()
             }
             
         }

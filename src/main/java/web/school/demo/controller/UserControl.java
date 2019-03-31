@@ -26,6 +26,12 @@ public class UserControl {
         User data = userRepository.findById(id).get();
         return new ResponseEntity<>(BaseResultFactory.build(data),HttpStatus.OK);
     }
+    @GetMapping("/islogin")
+    @CrossOrigin
+    public ResponseEntity<?> isLogin(){
+        Boolean isLogin=true;
+        return new ResponseEntity<>(BaseResultFactory.build(isLogin),HttpStatus.OK);
+    }
 
     @PostMapping("/user/login")
     @CrossOrigin
