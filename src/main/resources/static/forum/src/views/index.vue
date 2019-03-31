@@ -6,8 +6,12 @@
                     <div class="header-l">
                         <h1>云论坛</h1>
                     </div>
-                    <div class="header-r">
+                    <div class="header-r" v-if="!isLogin">
                         <el-button @click="handleLogin">登录</el-button>
+                        <el-button @click="postForum">发帖子</el-button>
+                    </div>
+                    <div class="header-r" v-else>
+                        <el-button @click="handleLogin">登出</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </div>
                 </div>
@@ -35,7 +39,15 @@
         name:'index',
         data(){
             return {
+                isLogin:false,
                 data:[{
+                    id:1,
+                    topic:'题目',
+                    likeNums:102,
+                    topicTime:'2019.1.14',
+                    createUser:'小明',
+                    topicReplyCount:20
+                },{
                     id:1,
                     topic:'题目',
                     likeNums:102,
@@ -46,7 +58,8 @@
                 console:console
             }
         },
-        mounted (){
+        mounted(){
+            this.isLogined()
             this.getAllTopic()
         },
         methods:{
@@ -77,7 +90,27 @@
                         });
                     }
                 });
+            },
+            isLogined(){
+                this.$axios.get(
+                    "http://localhost:8081/islogin",{
+                        headers: {
+                        'Authorization': localStorage.getItem('token')
+                        }
+                    }
+                ).then(res =>{
+                    this.data.isLogin=res.data.data
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
             }
+            
         }
     }
 </script>
