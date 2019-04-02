@@ -19,6 +19,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             String token = request.getHeader("Authorization");
             if (token == null){
                 response.setContentType("text/json;charset=utf-8");
+                response.setHeader("Access-Control-Allow-Origin","*");
                 String result_json=new ObjectMapper().writeValueAsString(BaseResultFactory.build(0,"用户未登录"));
                 response.getWriter().append(result_json);
                 return false;

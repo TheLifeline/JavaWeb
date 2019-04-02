@@ -12,6 +12,15 @@ Vue.use(mavonEditor)
 Vue.config.productionTip = false
 Object.defineProperty(Vue.prototype, '$axios', { value: axios });
 
+axios.interceptors.request.use(function (config) {
+  let token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = token
+  }
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
 
 router.beforeEach((to, from, next) => {
   let token = localStorage.getItem('token')

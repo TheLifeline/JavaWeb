@@ -67,11 +67,7 @@
             },
             getAllTopic(){
                 this.$axios.get(
-                    "http://localhost:8081/topic",{
-                        headers: {
-                        'Authorization': localStorage.getItem('token')
-                        }
-                    }
+                    "http://localhost:8081/topic"
                 ).then(res =>{
                     this.data=res.data.data
                 })
@@ -86,11 +82,7 @@
             },
             isLogined: function(){
                 this.$axios.get(
-                    "http://localhost:8081/islogin",{
-                        headers: {
-                        'Authorization': localStorage.getItem('token')
-                        }
-                    }
+                    "http://localhost:8081/islogin"
                 ).then(res =>{
                     if(res.data.data){
                         this.isLogin=res.data.data

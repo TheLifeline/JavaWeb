@@ -34,7 +34,7 @@
                 <div>
                     <div style="width:90%; background-color: #fafbfc; padding:20px; margin:0 auto">
                         <el-input placeholder="输入评论" v-model="data.input"></el-input>
-                        <div style="margin:20px 0"><el-button type="primary">评论</el-button></div>
+                        <div style="margin:20px 0"><el-button type="primary" @click="postComment">评论</el-button></div>
 
                         <div>
                             <div style="color: #8a9aa9" >{{data.name}}</div>
@@ -52,9 +52,9 @@
         name:'detail',
         data(){
             return {
-                id:this.$route.query.id,
                 isLogin:false,
                 data:{
+                    id:this.$route.query.id,
                     topic:'题目',
                     topicTime:'2019.1.14',
                     createUser:'小明',
@@ -71,15 +71,13 @@
             this.getDetail()
         },
         methods:{
+            handleLogin(){
+                this.$router.push('/login')
+            },
             getDetail(){
                 this.$axios.get(
                     "http://localhost:8081/detail",
-                    {
-                        params: {id: this.id},
-                        headers: {
-                        'Authorization': localStorage.getItem('token')
-                        }
-                    }
+                    {params: {id: this.data.id}}
                 ).then(res =>{
                     this.data=res.data.data
                 })
@@ -97,18 +95,12 @@
             },
             postComment(){
                 this.$axios.post(
-                    "http://localhost:8081/comment",
-                    {
-                        params: {id: this.id},
-                        headers: {
-                            'Authorization': localStorage.getItem('token')
-                        },
-
-                    }
+                    "http://localhost:8081/comment",this.data
                 ).then(res =>{
-                    this.data=res.data.data
-                })
-                    .catch(error => {
+                    this.$message({
+                        message:res.data.msg
+                    });
+                }).catch(error => {
                         if(error.response){
                             this.$message({
                                 message:error.response.data.msg,

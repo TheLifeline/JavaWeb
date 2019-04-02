@@ -60,11 +60,7 @@
             },
             isLogined: function(){
                 this.$axios.get(
-                    "http://localhost:8081/islogin",{
-                        headers: {
-                            'Authorization': localStorage.getItem('token')
-                        }
-                    }
+                    "http://localhost:8081/islogin"
                 ).then(res =>{
                     if(res.data.data){
                         this.isLogin=res.data.data
@@ -74,8 +70,7 @@
                             type:"warning"
                         });
                     }
-                })
-                    .catch(error => {
+                }).catch(error => {
                         if(error.response){
                             this.$message({
                                 message:error.response.data.msg,
