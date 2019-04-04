@@ -64,6 +64,7 @@ export default {
           this.$axios.post("http://localhost:8081/user/login",this.user_data)
                   .then(result => {
                       localStorage.setItem("token", result.data.data.token);
+                      localStorage.setItem("id",result.data.data.id);
                       // 将Token存储到localStorage
                       this.$message({
                         message:result.data.msg

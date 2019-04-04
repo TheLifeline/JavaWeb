@@ -45,6 +45,7 @@ public class UserControl {
             if (user!=null){
                 String token = JwtUtil.getToken(user.getUserName());
                 result.put("token",token);
+                result.put("id",user.getId().toString());
             }
             else {
                 return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.NOT_FOUND.value(),"用户未注册！"), HttpStatus.NOT_FOUND);

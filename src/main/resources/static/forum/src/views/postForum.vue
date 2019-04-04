@@ -6,7 +6,7 @@
                     <div class="header-l">
                         <h1>云论坛</h1>
                     </div>
-                    <div class="header-r" v-if="!isLogin">
+                    <div class="header-r" v-if="!data.isLogin">
                         <el-button @click="handleLogin">登录</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </div>
@@ -23,17 +23,17 @@
                     <div class="title">
                         <span>标题</span>
                     </div>
-                    <el-input v-model="title" class="write-input" type="text" placeholder="请输入标题"></el-input>
+                    <el-input v-model="data.title" class="write-input" type="text" placeholder="请输入标题"></el-input>
                 </div>
                 <div>
                     <div class="title">内容</div>
                     <div class="rich-text mt10">
                         <div id="main">
-                            <mavon-editor v-model="value" :ishljs = "true"/>
+                            <mavon-editor v-model="data.value" :ishljs = "true"/>
                         </div>
                     </div>
                     <div style="text-align: left; margin-bottom:10px;">
-                        <el-button style="width:98px;height:40px;margin-top: 20px;" type="primary">发布帖子</el-button>
+                        <el-button style="width:98px;height:40px;margin-top: 20px;" type="primary" @click="postForum">发布帖子</el-button>
                     </div>
                 </div>
             </div>
@@ -46,9 +46,11 @@
         name:'postForum',
         data() {
             return {
-                isLogin:false,
-                title:'',
-                value:''
+                data:{
+                    isLogin:false,
+                    title:'',
+                    value:''
+                }
             }
         },
         mounted(){
@@ -58,12 +60,33 @@
             handleLogin(){
                 this.$router.push('/login')
             },
+            postForum:function(){
+                this.$axios.post(
+                    "http://localhost:8081/forum", {
+                        "title":this.data.title,
+                        "value":this.data.value,
+                        "user_data":localStorage.getItem("id")
+                }
+                ).then(res =>{
+                    this.$message({
+                        message:res.data.msg
+                    });
+                    window.reload()
+                }).catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
+            },
             isLogined: function(){
                 this.$axios.get(
                     "http://localhost:8081/islogin"
                 ).then(res =>{
                     if(res.data.data){
-                        this.isLogin=res.data.data
+                        this.data.isLogin=res.data.data
                     }else {
                         this.$message({
                             message:res.data.msg,

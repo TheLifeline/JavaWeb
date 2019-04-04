@@ -36,9 +36,9 @@
                         <el-input placeholder="输入评论" v-model="data.input"></el-input>
                         <div style="margin:20px 0"><el-button type="primary" @click="postComment">评论</el-button></div>
 
-                        <div>
-                            <div style="color: #8a9aa9" >{{data.name}}</div>
-                            <div style="margin-left:20px" >{{data.comments}}</div>
+                        <div v-for="comment in data.comments_list" :key="comment">
+                            <div style="color: #8a9aa9" >{{comment.commentTime}}</div>
+                            <div style="margin-left:20px" >{{comment.commentContents}}</div>
                         </div>
                     </div>
                 </div>
@@ -59,9 +59,14 @@
                     topicTime:'2019.1.14',
                     createUser:'小明',
                     topicContents:".....",
-                    comments:"我说了好多内容",
-                    name:"谁谁谁",
-                    input:""
+                    comments_list:[
+                        {
+                            commentContents:null,
+                            commentTime:null
+                        }
+                    ],
+                    input:"",
+                    user_data:localStorage.getItem("id")
                 },
                 console:console
             }
@@ -95,11 +100,16 @@
             },
             postComment(){
                 this.$axios.post(
-                    "http://localhost:8081/comment",this.data
+                    "http://localhost:8081/comment",{
+                        "id":""+this.$route.query.id,
+                        "user_data":localStorage.getItem("id"),
+                        "input":this.data.input
+                    }
                 ).then(res =>{
                     this.$message({
                         message:res.data.msg
                     });
+                    window.reload()
                 }).catch(error => {
                         if(error.response){
                             this.$message({
