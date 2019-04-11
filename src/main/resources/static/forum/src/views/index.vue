@@ -4,15 +4,17 @@
             <div class="header">
                 <div class="header-middle">
                     <div class="header-l">
-                        <h1>云论坛</h1>
+                        <h1>北航在线编程社区</h1>
                     </div>
                     <div class="header-r" v-if="!isLogin">
                         <el-button @click="handleLogin">登录</el-button>
                         <el-button @click="postForum">发帖子</el-button>
+                        
                     </div>
                     <div class="header-r" v-else>
                         <el-button @click="LoginOut">登出</el-button>
                         <el-button @click="postForum">发帖子</el-button>
+                        <el-button @click="information">个人信息</el-button>
                     </div>
                 </div>
             </div>
@@ -64,6 +66,9 @@
             },
             handleLogin(){
                 this.$router.push('/login')
+            },
+           information(){
+                this.$router.push('/information')
             },
             getAllTopic(){
                 this.$axios.get(
@@ -127,7 +132,7 @@
     justify-content: space-between;
 }
 .header-l{
-    width: 90px;
+    width: 250px;
     height: 50px;
 }
 .header-l h1{
@@ -137,7 +142,7 @@
     margin-top: 5px;
 }
 .header-r{
-    width: 164px;
+    width: 290px;
     height: 50px;
     margin-top: 5px;
 }

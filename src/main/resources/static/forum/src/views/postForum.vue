@@ -4,7 +4,7 @@
             <div class="header">
                 <div class="header-middle">
                     <div class="header-l">
-                        <h1>云论坛</h1>
+                        <h1>北航在线编程社区</h1>
                     </div>
                     <div class="header-r" v-if="!data.isLogin">
                         <el-button @click="handleLogin">登录</el-button>
@@ -126,7 +126,7 @@
         justify-content: space-between;
     }
     .header-l{
-        width: 90px;
+        width: 250px;
         height: 50px;
     }
     .header-l h1{

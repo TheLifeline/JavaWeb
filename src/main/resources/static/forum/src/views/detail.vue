@@ -3,8 +3,8 @@
         <header style="width: 100%">
             <div class="header">
                 <div class="header-middle">
-                    <div class="header-l">
-                        <h1>云论坛</h1>
+                    <div class="header-l" >
+                        <h1>北航在线编程社区</h1>
                     </div>
                     <div class="header-r" v-if="!isLogin">
                         <el-button @click="handleLogin">登录</el-button>
@@ -26,13 +26,13 @@
                     <h4>{{data.createUser}}</h4>
                     <div>{{data.topicTime}}</div>
                 </div>
-                <div style="padding:20px;">{{data.topicContents}}</div>
-
+                <!--<div style="padding:20px;">{{data.topicContents}}</div>-->
+                <mavon-editor v-model="data.topicContents" :subfield="false" :defaultOpen="state" :toolbarsFlag	="false"/>
                 <div class="pinglun">
                     评论
                 </div>
                 <div>
-                    <div style="width:90%; background-color: #fafbfc; padding:20px; margin:0 auto">
+                    <div style="width:97%; background-color: #fafbfc; padding:20px; margin:0 auto">
                         <el-input placeholder="输入评论" v-model="data.input"></el-input>
                         <div style="margin:20px 0"><el-button type="primary" @click="postComment">评论</el-button></div>
 
@@ -52,6 +52,8 @@
         name:'detail',
         data(){
             return {
+                value: '',
+                state:"preview",
                 isLogin:false,
                 data:{
                     id:this.$route.query.id,
@@ -168,12 +170,12 @@
         justify-content: space-between;
     }
     .header-l{
-        width: 90px;
+        width: 250px;
         height: 50px;
     }
     .header-l h1{
         color: #fff;
-        font-weight: 400;
+        font-weight:400;
         font-size: 30px;
         margin-top: 5px;
     }
@@ -195,6 +197,5 @@
         color: #8a9aa9;
         font-size: 16px;
         font-weight: 400;
-        text-align: center;
     }
 </style>

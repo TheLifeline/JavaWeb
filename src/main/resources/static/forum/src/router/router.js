@@ -31,6 +31,14 @@ export default new Router({
       path:'/login',
       name: 'login',
       component: () => import('../views/login')
+    },
+    {
+      path: '/information',
+      meta:{ 
+        requiresAuth: true 
+      },
+      name: 'information',
+      component: () => import('../views/information')
     }
   ]
 })
