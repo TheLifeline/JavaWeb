@@ -22,6 +22,36 @@ public class User {
 
     private String Email;
 
+    private String School;
+
+    private String project;
+
+    public String getSchool() {
+        return School;
+    }
+
+    public void setSchool(String school) {
+        School = school;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    private String number;
+
     @Lob
     private String UserStatement;
 

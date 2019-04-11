@@ -26,6 +26,39 @@ public class UserControl {
         User data = userRepository.findById(id).get();
         return new ResponseEntity<>(BaseResultFactory.build(data),HttpStatus.OK);
     }
+
+    @PostMapping("/user/{id}")
+    @CrossOrigin
+    public ResponseEntity<?> postUser(@PathVariable("id") Integer id,@RequestBody String jsonParam){
+        try {
+            HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+            User user= userRepository.findById(id).get();
+            user.setUserName(user_data.get("username"));
+            user.setNumber(user_data.get("number"));
+            user.setSchool(user_data.get("school"));
+            user.setProject(user_data.get("project"));
+            user.setUserStatement(user_data.get("statement"));
+            userRepository.save(user);
+            return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/user/password")
+    @CrossOrigin
+    public ResponseEntity<?> postPossword(@RequestBody String jsonParam){
+        try{
+            HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+            User user= userRepository.findById(Integer.valueOf(user_data.get("id"))).get();
+            user.setPassword(user_data.get("password"));
+            userRepository.save(user);
+            return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
+        }catch (IOException e){
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/islogin")
     @CrossOrigin
     public ResponseEntity<?> isLogin(){
