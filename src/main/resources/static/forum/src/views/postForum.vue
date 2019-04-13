@@ -12,7 +12,8 @@
                     </div>
                     <div class="header-r" v-else>
                         <el-button @click="LoginOut">登出</el-button>
-                        <el-button @click="postForum">发帖子</el-button>
+                        <el-button @click="information">个人信息</el-button>
+                        <el-button @click="index">返回主页</el-button>
                     </div>
                 </div>
             </div>
@@ -81,6 +82,12 @@
                     }
                 });
             },
+            information(){
+                this.$router.push('/information')
+            },
+            index(){
+                this.$router.push('/')
+            },
             isLogined: function(){
                 this.$axios.get(
                     "http://localhost:8081/islogin"
@@ -136,7 +143,7 @@
         margin-top: 5px;
     }
     .header-r{
-        width: 164px;
+        width: 400px;
         height: 50px;
         margin-top: 5px;
     }

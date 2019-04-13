@@ -13,6 +13,7 @@
           <div class="header-r" v-else>
             <el-button @click="LoginOut">登出</el-button>
             <el-button @click="postForum">发帖子</el-button>
+            <el-button @click="index">返回主页</el-button>
           </div>
         </div>
       </div>
@@ -43,6 +44,9 @@ export default {
     },
     information() {
       this.$router.push("/information");
+    },
+    index(){
+      this.$router.push('/')
     },
     isLogined: function() {
       this.$axios
@@ -100,7 +104,7 @@ export default {
   margin-top: 5px;
 }
 .header-r {
-  width: 290px;
+  width: 400px;
   height: 50px;
   margin-top: 5px;
 }

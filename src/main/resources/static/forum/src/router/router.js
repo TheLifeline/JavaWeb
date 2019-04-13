@@ -34,8 +34,8 @@ export default new Router({
     },
     {
       path: '/information',
-      meta:{ 
-        requiresAuth: true 
+      meta:{
+        requiresAuth: true
       },
       name: 'information',
       component: () => import('../views/information')

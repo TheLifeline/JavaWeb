@@ -142,7 +142,7 @@
     margin-top: 5px;
 }
 .header-r{
-    width: 290px;
+    width: 400px;
     height: 50px;
     margin-top: 5px;
 }
