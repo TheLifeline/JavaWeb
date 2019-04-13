@@ -13,16 +13,16 @@ export default new Router({
     },
     {
       path: '/postForum',
-      meta:{ 
-        requiresAuth: true 
+      meta:{
+        requiresAuth: true
       },
       name: 'postForum',
       component: () => import('../views/postForum')
     },
     {
       path: '/detail',
-      meta:{ 
-        requiresAuth: true 
+      meta:{
+        requiresAuth: true
       },
       name: 'detail',
       component: () => import('../views/detail')
@@ -37,8 +37,26 @@ export default new Router({
       meta:{
         requiresAuth: true
       },
+      // redirect: {
+      //   name: 'personMessage'
+      // },
       name: 'information',
-      component: () => import('../views/information')
+      component: () => import('../views/information'),
+      children:[
+        {
+          path:'personMessage',
+          name:'personMessage',
+          component:() => import('../views/informations/personMessage'),
+        },
+        {
+          path:'editMessage',
+          component:() => import('../views/informations/editMessage'),
+        },
+        {
+          path:'editPassword',
+          component:() => import('../views/informations/editPassword'),
+        },
+      ]
     }
   ]
 })
