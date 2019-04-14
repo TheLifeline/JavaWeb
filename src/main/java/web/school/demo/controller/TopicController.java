@@ -40,7 +40,7 @@ public class TopicController {
             midMap.put("topic", bsTopic.getTopic());
             midMap.put("likeNums",bsTopic.getLikeNums().toString());
             midMap.put("topicTime",bsTopic.getTopicTime().toString());
-            midMap.put("createUser",bsTopic.getUser().getUserName());
+            midMap.put("createUser",bsTopic.getUser().getNickName());
             midMap.put("topicReplyCount",bsTopic.getTopicReplyCount().toString());
             result.add(midMap);
         }
@@ -56,7 +56,7 @@ public class TopicController {
         result.put("likeNums",bsTopic.getLikeNums().toString());
         result.put("topicContents",bsTopic.getTopicContents());
         result.put("topicTime",bsTopic.getTopicTime().toString());
-        result.put("createUser",bsTopic.getUser().getUserName());
+        result.put("createUser",bsTopic.getUser().getNickName());
         result.put("comments_list",bsTopic.getCommentList());
         return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
     }

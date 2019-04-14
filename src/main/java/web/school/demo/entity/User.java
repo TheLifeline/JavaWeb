@@ -14,8 +14,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)//自增主键
     private Integer Id;
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     @Column(nullable = false)
-    private String UserName;
+    private String nickName;
+
+    private String Name;
 
     @Column(nullable = false)
     private String Password;
@@ -24,7 +34,7 @@ public class User {
 
     private String School;
 
-    private String project;
+    private String major;
 
     public String getSchool() {
         return School;
@@ -34,12 +44,12 @@ public class User {
         School = school;
     }
 
-    public String getProject() {
-        return project;
+    public String getMajor() {
+        return major;
     }
 
-    public void setProject(String project) {
-        this.project = project;
+    public void setMajor(String major) {
+        this.major = major;
     }
 
     public String getNumber() {
@@ -72,12 +82,12 @@ public class User {
         Id = id;
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getName() {
+        return Name;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setName(String name) {
+        Name = name;
     }
 
     public String getPassword() {

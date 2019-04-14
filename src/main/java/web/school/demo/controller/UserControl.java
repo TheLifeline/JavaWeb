@@ -20,24 +20,26 @@ public class UserControl {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user")
     @CrossOrigin
-    public ResponseEntity<?> getUser(@PathVariable("id") Integer id){
-        User data = userRepository.findById(id).get();
-        return new ResponseEntity<>(BaseResultFactory.build(data),HttpStatus.OK);
+    public ResponseEntity<?> getUser(@RequestParam("id") Integer id){
+        User userInfo = userRepository.findById(id).get();
+        return new ResponseEntity<>(BaseResultFactory.build(userInfo),HttpStatus.OK);
     }
 
-    @PostMapping("/user/{id}")
+    @PostMapping("/user")
     @CrossOrigin
-    public ResponseEntity<?> postUser(@PathVariable("id") Integer id,@RequestBody String jsonParam){
+    public ResponseEntity<?> postUser(@RequestBody String jsonParam){
+        LogFactory.getLog("test").info(jsonParam);
         try {
             HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+            Integer id=Integer.valueOf(user_data.get("id"));
             User user= userRepository.findById(id).get();
-            user.setUserName(user_data.get("username"));
+            user.setName(user_data.get("userName"));
             user.setNumber(user_data.get("number"));
             user.setSchool(user_data.get("school"));
-            user.setProject(user_data.get("project"));
-            user.setUserStatement(user_data.get("statement"));
+            user.setMajor(user_data.get("major"));
+            user.setUserStatement(user_data.get("userStatement"));
             userRepository.save(user);
             return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
         } catch (IOException e) {
@@ -51,9 +53,15 @@ public class UserControl {
         try{
             HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
             User user= userRepository.findById(Integer.valueOf(user_data.get("id"))).get();
-            user.setPassword(user_data.get("password"));
-            userRepository.save(user);
-            return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
+            String oldPassword=user_data.get("oldPassword");
+            String newPassword=user_data.get("newPassword");
+            if (user.getPassword().equals(oldPassword)){
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
+            }else{
+                throw new IOException("输入错误");
+            }
         }catch (IOException e){
             return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
         }
@@ -76,7 +84,7 @@ public class UserControl {
             String password=user_data.get("password");
             User user=userRepository.findUserByUserId(username,password);
             if (user!=null){
-                String token = JwtUtil.getToken(user.getUserName());
+                String token = JwtUtil.getToken(user.getNickName());
                 result.put("token",token);
                 result.put("id",user.getId().toString());
             }
