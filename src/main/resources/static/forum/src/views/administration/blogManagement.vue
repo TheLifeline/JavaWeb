@@ -4,7 +4,7 @@
             <el-table-column type='index' width="50" align="center"></el-table-column>
             <el-table-column label="标题" align="center">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="handleTitle(scope.row.id)">{{scope.row.topic}}</el-button>
+                    <el-button type="text" @click="manageBlogContent(scope.row.id)">{{scope.row.topic}}</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="topicTime" label="发表时间" align="center"></el-table-column>
@@ -47,24 +47,40 @@
             this.getBlog()
         },
         methods:{
-            getBlog() {
+            getBlog() {  //
                 var id = this.$route.query.id
+                if(id==null){
+                    id = 0
+                }
+                this.$axios.get(
+                    "http://localhost:8081/topic",
+                     {params: {id: id}}
+                ).then(res =>{
+                    this.data=[{
+                        id:1,
+                        topic:'题目',
+                        topicTime:'2019.1.14',
+                        createUser:'小明',
+                        state:false
+                    }]
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
+            },
+            manageBlogContent(id){
+                this.$router.push({ path: '/administrator/blogContentManagement', query: { id: id }});
+            },
+            blogPass(){
 
-                window.console.log(id)
-                this.data.data = [{
-                    id:1,
-                    topic:'题目',
-                    topicTime:'2019.1.14',
-                    createUser:'小明',
-                    state:false
-                },{
-                    id:2,
-                    topic:'题目',
-                    topicTime:'2019.1.15',
-                    createUser:'小明',
-                    state:false
-                }];
-                
+            },
+            blogrefuse(){
+
             }
         },
         filters:{

@@ -43,9 +43,8 @@ export default {
                 "http://localhost:8081/islogin"
             ).then(res => {
                 if(res.data.data){
-                    //this.$store.commit('id', res.data.id)
                     this.$store.commit("id",res.data.id);
-                    this.$store.commit("status", "administrator");
+                    this.$store.commit("status", res.data.status);
                 } else {
                 this.$message({
                     message:res.data.msg,

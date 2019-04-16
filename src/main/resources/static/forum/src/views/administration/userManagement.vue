@@ -9,7 +9,6 @@
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button @click="checkBlogs(scope.row.id)" type="info" plain>查看博客</el-button>
-                    <el-button @click="checkComments(scope.row.id)" type="info" plain>查看评论</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -35,9 +34,6 @@
         methods:{
             checkBlogs(id) {
                 this.$router.push({ path: '/administrator/blogManagement', query: { id: id }});
-            },
-            checkComments(id) {
-                return id
             }
         },
         filters:{

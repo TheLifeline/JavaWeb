@@ -86,7 +86,11 @@ export default new Router({
           path:'userManagement',
           name:'userManagement',
           component:() => import('../views/administration/userManagement'),
-        },
+        },{
+          path:'blogContentManagement',
+          name:'blogContentManagement',
+          component:() => import('../views/administration/blogContentManagement')
+        }
       ]
     }
   ]
