@@ -10,6 +10,8 @@
                 <el-menu-item-group>
                     <template slot="title">用户管理</template>
                     <el-menu-item index="/information/personMessage">个人信息</el-menu-item>
+                    <el-menu-item index="/information/mybstopic">我的帖子</el-menu-item>
+                    <el-menu-item index="/information/myComment">我的评论</el-menu-item>
                     <el-menu-item index="/information/editMessage">修改信息</el-menu-item>
                     <el-menu-item index="/information/editPassword">修改密码</el-menu-item>
                 </el-menu-item-group>
