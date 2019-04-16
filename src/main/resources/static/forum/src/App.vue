@@ -1,21 +1,18 @@
 <template>
-  <div id="app">
+  <div id="app" style="background: #f1f1f1; height:100vh">
+    <BlogHeader/>
     <router-view/>
   </div>
 </template>
 
 <script>
+import BlogHeader from './views/blog-header.vue'
+
 export default {
   name: 'app',
+  components:{
+    BlogHeader
+  },
+
 }
 </script>
-
-<style>
-  *{
-    margin: 0;
-    padding: 0;
-  }
-  body .el-table th.gutter{
-    display: table-cell!important;
-  }
-</style>

@@ -1,18 +1,5 @@
 <template>
-  <div style="width:100vw; height:100vh; background-color:#f1f1f1">
-    <header style="width: 100%">
-      <div class="header">
-        <div class="header-middle">
-          <div class="header-l">
-            <h1>北航在线编程社区</h1>
-          </div>
-          <div class="header-r">
-            <el-button @click="handleJumpIndex">首页</el-button>
-            <!-- <el-button @click="postForum">发帖子</el-button> -->
-          </div>
-        </div>
-      </div>
-    </header>
+  <div>
     <h1 style="color:#333; text-align:center; margin-top:30px">欢迎来到云论坛</h1>
     <div style="margin:70px auto 0; width:40%;">
       <el-card>
@@ -63,8 +50,11 @@ export default {
         return (
           this.$axios.post("http://localhost:8081/user/login",this.user_data)
                   .then(result => {
-                      localStorage.setItem("token", result.data.data.token);
+                      localStorage.setItem("token",result.data.data.token);
                       localStorage.setItem("id",result.data.data.id);
+                      this.$store.commit("id",result.data.data.id);
+                      this.$store.commit("isLogin",true)
+                      //this.$store.commit("status",result.data.data.status)
                       // 将Token存储到localStorage
                       this.$message({
                         message:result.data.msg
@@ -88,32 +78,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.header {
-  width: 100%;
-  height: 50px;
-  background-color: #409eff;
-}
-.header-middle {
-  margin: 0 auto;
-  width: 1170px;
-  display: flex;
-  justify-content: space-between;
-}
-.header-l {
-  width: 250px;
-  height: 50px;
-}
-.header-l h1 {
-  color: #fff;
-  font-weight: 400;
-  font-size: 30px;
-  margin-top: 5px;
-}
-.header-r {
-  width: 164px;
-  height: 50px;
-  margin-top: 5px;
-}
-</style>

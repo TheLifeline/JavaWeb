@@ -1,41 +1,21 @@
 <template>
-    <div style="background: #f1f1f1; height:100vh">
-        <header style="width: 100%">
-            <div class="header">
-                <div class="header-middle">
-                    <div class="header-l">
-                        <h1>北航在线编程社区</h1>
-                    </div>
-                    <div class="header-r" v-if="!data.isLogin">
-                        <el-button @click="handleLogin">登录</el-button>
-                        <el-button @click="postForum">发帖子</el-button>
-                    </div>
-                    <div class="header-r" v-else>
-                        <el-button @click="LoginOut">登出</el-button>
-                        <el-button @click="information">个人信息</el-button>
-                        <el-button @click="index">返回主页</el-button>
-                    </div>
+    <div style="width:1170px;margin: 0 auto;">
+        <div class="write-container">
+            <div>
+                <div class="title">
+                    <span>标题</span>
                 </div>
+                <el-input v-model="data.title" class="write-input" type="text" placeholder="请输入标题"></el-input>
             </div>
-        </header>
-        <div style="width:1170px;margin: 0 auto;">
-            <div class="write-container">
-                <div>
-                    <div class="title">
-                        <span>标题</span>
+            <div>
+                <div class="title">内容</div>
+                <div class="rich-text mt10">
+                    <div id="main">
+                        <mavon-editor v-model="data.value" :ishljs = "true"/>
                     </div>
-                    <el-input v-model="data.title" class="write-input" type="text" placeholder="请输入标题"></el-input>
                 </div>
-                <div>
-                    <div class="title">内容</div>
-                    <div class="rich-text mt10">
-                        <div id="main">
-                            <mavon-editor v-model="data.value" :ishljs = "true"/>
-                        </div>
-                    </div>
-                    <div style="text-align: left; margin-bottom:10px;">
-                        <el-button style="width:98px;height:40px;margin-top: 20px;" type="primary" @click="postForum">发布帖子</el-button>
-                    </div>
+                <div style="text-align: left; margin-bottom:10px;">
+                    <el-button style="width:98px;height:40px;margin-top: 20px;" type="primary" @click="postForum">发布帖子</el-button>
                 </div>
             </div>
         </div>
@@ -121,33 +101,6 @@
 </script>
 
 <style scoped>
-    .header{
-        width: 100%;
-        height: 50px;
-        background-color: #409eff;
-    }
-    .header-middle{
-        margin: 0 auto;
-        width: 1170px;
-        display: flex;
-        justify-content: space-between;
-    }
-    .header-l{
-        width: 250px;
-        height: 50px;
-    }
-    .header-l h1{
-        color: #fff;
-        font-weight: 400;
-        font-size: 30px;
-        margin-top: 5px;
-    }
-    .header-r{
-        width: 400px;
-        height: 50px;
-        margin-top: 5px;
-    }
-
     .write-container{
         width: 1170px;
         margin: 30px auto;

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router/router.js'
@@ -6,7 +7,9 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import App from './App.vue'
 import axios from 'axios'
+import './components/_globals'
 
+Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
 Vue.config.productionTip = false
@@ -33,7 +36,27 @@ router.beforeEach((to, from, next) => {
   next()
 });
 
+const store = new Vuex.Store({
+  state: {
+    id: 0,
+    status: null,
+    isLogin: false
+  },
+  mutations: {
+    status(state, status) {
+      state.status = status
+    },
+    id(state, id){
+      state.id = id
+    },
+    isLogin(state, isLogin){
+      state.isLogin = isLogin
+    }
+  }
+})
+
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')
