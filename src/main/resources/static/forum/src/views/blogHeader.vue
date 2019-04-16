@@ -3,12 +3,17 @@
         <div class="header">
             <div class="header-middle">
                 <div class="header-l" >
-                    <h1>北航在线编程社区</h1>
+                    <h1 @click="index">北航在线编程社区</h1>
                 </div>
                 <div class="header-r">
-                    <template v-if="!isLogin">
+                    <template v-if="status===null">
                         <el-button @click="handleLogin">登录</el-button>
                         <el-button @click="postForum">发帖子</el-button>
+                    </template> 
+                    <template v-else-if="status==='administrator'">
+                        <el-button @click="LoginOut">登出</el-button>
+                        <el-button @click="administartion">管理页面</el-button>
+                        <el-button @click="information">个人信息</el-button>
                     </template> 
                     <template v-else>
                         <el-button @click="LoginOut">登出</el-button>
@@ -28,11 +33,8 @@ export default {
         this.identifyAuth()
     },
     computed:{
-        //status() {
-        //    return this.$store.state.status
-        //},
-        isLogin() {
-            return this.$store.state.isLogin
+        status() {
+            return this.$store.state.status
         }
     },
     methods:{
@@ -42,8 +44,8 @@ export default {
             ).then(res => {
                 if(res.data.data){
                     //this.$store.commit('id', res.data.id)
-                    //this.$store.commit('status', res.data.status)
-                    this.$store.commit('isLogin', res.data.data)
+                    this.$store.commit("id",res.data.id);
+                    this.$store.commit("status", "administrator");
                 } else {
                 this.$message({
                     message:res.data.msg,
@@ -75,9 +77,16 @@ export default {
             this.$message({
                 message:"success!"
             });
-            this.$store.commit('isLogin', false)
+            this.$store.commit('status', null);
+            this.$store.commit('id', 0)
             localStorage.clear()
-        }  
+        },
+        administartion(){
+            this.$router.push('/administrator')
+        },
+        index(){
+            this.$router.push('/')
+        }
     }
 }
 </script>

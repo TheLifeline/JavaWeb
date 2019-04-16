@@ -56,6 +56,42 @@ export default new Router({
           path:'editPassword',
           component:() => import('../views/informations/editPassword'),
         },
+        {
+          path:'mybstopic',
+          component:() => import('../views/informations/mybstopic'),
+        },
+        {
+          path:'myComment',
+          component:() => import('../views/informations/myComment'),
+        },
+      ]
+    },
+    {
+      path: '/administrator',
+      meta:{
+        requiresAuth: true
+      },
+      // redirect: {
+      //   name: 'personMessage'
+      // },
+      name: 'administrator',
+      component: () => import('../views/administrator'),
+      children:[
+        {
+          path:'blogManagement',
+          name:'blogManagement',
+          component:() => import('../views/administration/blogManagement'),
+        },
+        {
+          path:'commentManagement',
+          name:'commentManagement',
+          component:() => import('../views/informations/editMessage'),
+        },
+        {
+          path:'userManagement',
+          name:'userManagement',
+          component:() => import('../views/informations/editPassword'),
+        },
       ]
     }
   ]

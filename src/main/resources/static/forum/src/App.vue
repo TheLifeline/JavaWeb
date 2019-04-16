@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import BlogHeader from './views/blog-header.vue'
+import BlogHeader from './views/blogHeader.vue'
 
 export default {
   name: 'app',
