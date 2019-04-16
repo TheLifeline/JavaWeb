@@ -12,7 +12,7 @@
                     <el-input type="password" v-model="password.againPassword"></el-input>
                 </el-form-item>
             </el-form>
-            <el-button type="primary">确认修改</el-button>
+            <el-button type="primary" @click="postPassword">确认修改</el-button>
         </el-card>
     </div>
 </template>
@@ -25,9 +25,28 @@
                     oldPassword:'',
                     newPassword:'',
                     againPassword:'',
+                    id:localStorage.getItem("id")
                 },
             }
         },
+        methods:{
+            postPassword(){
+                this.$axios.post(
+                    "http://localhost:8081/user/password",this.password
+                ).then(res =>{
+                    this.$message({
+                        message:res.data.msg
+                    });
+                }).catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
+            }
+        }
     }
 </script>
 

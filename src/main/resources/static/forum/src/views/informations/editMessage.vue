@@ -3,22 +3,22 @@
         <el-card>
             <el-form>
                 <el-form-item label="姓名:">
-                    <el-input v-model="userInfo.username"></el-input>
+                    <el-input v-model="data.userName"></el-input>
                 </el-form-item>
                 <el-form-item label="学校:">
-                    <el-input type="password" v-model="userInfo.schoolName"></el-input>
+                    <el-input v-model="data.school"></el-input>
                 </el-form-item>
                 <el-form-item label="专业:">
-                    <el-input type="password" v-model="userInfo.majorName"></el-input>
+                    <el-input v-model="data.major"></el-input>
                 </el-form-item>
                 <el-form-item label="学号:">
-                    <el-input v-model="userInfo.userNum"></el-input>
+                    <el-input v-model="data.number"></el-input>
                 </el-form-item>
                 <el-form-item label="简介:">
-                    <el-input type="textarea" v-model="userInfo.introduction"></el-input>
+                    <el-input type="textarea" v-model="data.userStatement"></el-input>
                 </el-form-item>
             </el-form>
-            <el-button type="primary">确认修改</el-button>
+            <el-button type="primary" @click="postUserDetail">确认修改</el-button>
         </el-card>
     </div>
 </template>
@@ -27,15 +27,42 @@
     export default {
         data(){
             return{
-                userInfo:{
-                    username:'小明',
-                    schoolName:'家里蹲',
-                    majorName:'无业游民',
-                    userNum:'123456789',
-                    introduction:'这是简述!!!!!!!!',
+                data:{
+                    userName:'',
+                    school:'',
+                    major:'',
+                    number:'',
+                    userStatement:'',
                 },
+                id:localStorage.getItem("id")
             }
         },
+        methods:{
+            postUserDetail(){
+                this.$axios.post(
+                    "http://localhost:8081/user",
+                    {
+                        "userName":this.data.userName,
+                        "school":this.data.school,
+                        "major":this.data.major,
+                        "number":this.data.number,
+                        "userStatement":this.data.userStatement,
+                        "id":localStorage.getItem("id")
+                    }
+                ).then(res =>{
+                    this.$message({
+                        message:res.data.msg
+                    });
+                }).catch(error => {
+                        if(error.response){
+                            this.$message({
+                                message:error.response.data.msg,
+                                type:"warning"
+                            });
+                        }
+                    });
+            }
+        }
     }
 </script>
 
