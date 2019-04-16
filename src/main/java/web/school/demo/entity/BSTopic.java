@@ -20,6 +20,17 @@ public class BSTopic {
     private Integer TopicClickCount;
 
     @Column(nullable = false)
+    private Integer TopicState;
+
+    public Integer getTopicState() {
+        return TopicState;
+    }
+
+    public void setTopicState(Integer topicState) {
+        TopicState = topicState;
+    }
+
+    @Column(nullable = false)
     private String Topic;
 
     @Lob

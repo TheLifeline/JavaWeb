@@ -1,0 +1,107 @@
+package web.school.demo.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import web.school.demo.comment.dto.BaseResultFactory;
+import web.school.demo.entity.BSTopic;
+import web.school.demo.entity.Comment;
+import web.school.demo.entity.User;
+import web.school.demo.repository.CommentRepository;
+import web.school.demo.repository.TopicRepository;
+import web.school.demo.repository.UserRepository;
+import web.school.demo.security.JwtUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+public class adminController {
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    TopicRepository topicRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
+
+    @PostMapping("/admin/topic")
+    @CrossOrigin
+    public ResponseEntity<?> getUserTopic(HttpServletRequest request, @RequestBody String jsonParam){
+        String token = request.getHeader("Authorization");
+        if("admin".equals(JwtUtil.getRolebyToken(token))){
+            try{
+                HashMap<String,String> data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+                Integer id=Integer.valueOf(data.get("id"));
+                User user = userRepository.findById(id).get();
+                List<Map<String, String>> result =new ArrayList<>();
+                List<BSTopic> mid= user.getTopicList();
+                if(id.equals(0)){
+                    mid=topicRepository.findAll();
+                }
+                for (BSTopic bsTopic : mid) {
+                    Map<String, String> midMap = new HashMap<>();
+                    midMap.put("id", bsTopic.getId().toString());
+                    midMap.put("topic", bsTopic.getTopic());
+                    midMap.put("likeNums",bsTopic.getLikeNums().toString());
+                    midMap.put("topicTime",bsTopic.getTopicTime().toString());
+                    midMap.put("createUser",bsTopic.getUser().getNickName());
+                    midMap.put("topicReplyCount",bsTopic.getTopicReplyCount().toString());
+                    midMap.put("state",bsTopic.getTopicState().toString());
+                    result.add(midMap);
+                }
+                return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
+            }catch (IOException e){
+                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.NOT_FOUND.value(),"非管理员用户"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/admin/blogAuditing")
+    @CrossOrigin
+    public ResponseEntity<?> postBlogAuditing(HttpServletRequest request, @RequestBody String jsonParam){
+        String token = request.getHeader("Authorization");
+        if("admin".equals(JwtUtil.getRolebyToken(token))){
+            try{
+                HashMap<String,String> data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+                BSTopic topic = topicRepository.findById(Integer.valueOf(data.get("id"))).get();
+                topic.setTopicState(Integer.valueOf(data.get("state")));
+                return new ResponseEntity<>(BaseResultFactory.build(true), HttpStatus.OK) ;
+            }catch (IOException e){
+                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.NOT_FOUND.value(),"非管理员用户"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/admin/deleteComment")
+    @CrossOrigin
+    public ResponseEntity<?> postDeleteComment(HttpServletRequest request, @RequestBody String jsonParam){
+        String token = request.getHeader("Authorization");
+        if("admin".equals(JwtUtil.getRolebyToken(token))){
+            try{
+                HashMap<String,String> data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+                commentRepository.deleteCommentById(Integer.valueOf(data.get("id")));
+                return new ResponseEntity<>(BaseResultFactory.build(true), HttpStatus.OK) ;
+            }catch (IOException e){
+                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.NOT_FOUND.value(),"非管理员用户"), HttpStatus.NOT_FOUND);
+        }
+    }
+}

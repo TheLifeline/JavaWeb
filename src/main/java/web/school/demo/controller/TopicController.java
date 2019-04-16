@@ -35,14 +35,16 @@ public class TopicController {
         List<Map<String, String>> result =new ArrayList<>();
         List<BSTopic> mid= topicRepository.findAll();
         for (BSTopic bsTopic : mid) {
-            Map<String, String> midMap = new HashMap<>();
-            midMap.put("id", bsTopic.getId().toString());
-            midMap.put("topic", bsTopic.getTopic());
-            midMap.put("likeNums",bsTopic.getLikeNums().toString());
-            midMap.put("topicTime",bsTopic.getTopicTime().toString());
-            midMap.put("createUser",bsTopic.getUser().getNickName());
-            midMap.put("topicReplyCount",bsTopic.getTopicReplyCount().toString());
-            result.add(midMap);
+            if(bsTopic.getTopicState().equals(1)){
+                Map<String, String> midMap = new HashMap<>();
+                midMap.put("id", bsTopic.getId().toString());
+                midMap.put("topic", bsTopic.getTopic());
+                midMap.put("likeNums",bsTopic.getLikeNums().toString());
+                midMap.put("topicTime",bsTopic.getTopicTime().toString());
+                midMap.put("createUser",bsTopic.getUser().getNickName());
+                midMap.put("topicReplyCount",bsTopic.getTopicReplyCount().toString());
+                result.add(midMap);
+            }
         }
         return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
     }
@@ -51,14 +53,18 @@ public class TopicController {
     @GetMapping("/detail")
     public ResponseEntity<?> getDetail(@RequestParam("id") Integer id){
         BSTopic bsTopic =topicRepository.findById(id).get();
-        Map<String, Object> result = new HashMap<>();
-        result.put("topic", bsTopic.getTopic());
-        result.put("likeNums",bsTopic.getLikeNums().toString());
-        result.put("topicContents",bsTopic.getTopicContents());
-        result.put("topicTime",bsTopic.getTopicTime().toString());
-        result.put("createUser",bsTopic.getUser().getNickName());
-        result.put("comments_list",bsTopic.getCommentList());
-        return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
+        if (bsTopic.getTopicState().equals(1)){
+            Map<String, Object> result = new HashMap<>();
+            result.put("topic", bsTopic.getTopic());
+            result.put("likeNums",bsTopic.getLikeNums().toString());
+            result.put("topicContents",bsTopic.getTopicContents());
+            result.put("topicTime",bsTopic.getTopicTime().toString());
+            result.put("createUser",bsTopic.getUser().getNickName());
+            result.put("comments_list",bsTopic.getCommentList());
+            return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
+        }else{
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"请求有误！"),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @CrossOrigin
@@ -98,6 +104,7 @@ public class TopicController {
             bsTopic.setLikeNums(0);
             bsTopic.setTopicClickCount(0);
             bsTopic.setTopicReplyCount(0);
+            bsTopic.setTopicState(0);
             bsTopic.setTopicTime(new Timestamp(System.currentTimeMillis()));
             topicRepository.save(bsTopic);
             return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
