@@ -56,6 +56,14 @@ export default new Router({
           path:'editPassword',
           component:() => import('../views/informations/editPassword'),
         },
+        {
+          path:'mybstopic',
+          component:() => import('../views/informations/mybstopic'),
+        },
+        {
+          path:'myComment',
+          component:() => import('../views/informations/myComment'),
+        },
       ]
     },
     {
