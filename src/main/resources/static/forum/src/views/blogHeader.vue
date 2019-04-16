@@ -10,7 +10,7 @@
                         <el-button @click="handleLogin">登录</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </template> 
-                    <template v-else-if="status==='administrator'">
+                    <template v-else-if="status==='admin'">
                         <el-button @click="LoginOut">登出</el-button>
                         <el-button @click="administartion">管理页面</el-button>
                         <el-button @click="information">个人信息</el-button>
