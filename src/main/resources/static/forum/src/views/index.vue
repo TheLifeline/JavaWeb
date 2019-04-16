@@ -20,7 +20,6 @@
         name:'index',
         data(){
             return {
-                isLogin:false,
                 data:[{
                     id:1,
                     topic:'题目',
@@ -50,6 +49,9 @@
                         });
                     }
                 });
+            },
+            handleTitle(){
+                
             }
         }
     }

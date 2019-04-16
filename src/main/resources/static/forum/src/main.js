@@ -40,7 +40,6 @@ const store = new Vuex.Store({
   state: {
     id: 0,
     status: null,
-    isLogin: false
   },
   mutations: {
     status(state, status) {
@@ -48,9 +47,6 @@ const store = new Vuex.Store({
     },
     id(state, id){
       state.id = id
-    },
-    isLogin(state, isLogin){
-      state.isLogin = isLogin
     }
   }
 })
