@@ -34,7 +34,6 @@
             return {
                 value: '',
                 state:"preview",
-                isLogin:false,
                 data:{
                     id:this.$route.query.id,
                     topic:'题目',

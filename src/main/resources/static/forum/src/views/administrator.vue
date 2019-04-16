@@ -15,9 +15,9 @@
             </el-submenu>
         </el-menu>
       </el-aside>
-      <el-mian style="width:100%">
+      <el-main style="width:100%">
         <router-view></router-view>
-      </el-mian>
+      </el-main>
     </el-container>
 </template>
 

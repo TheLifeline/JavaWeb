@@ -17,8 +17,8 @@
             <el-table-column label="操作" align="center">
                 <div slot-scope="scope" >
                     <template v-if="!scope.row.state">
-                        <el-button @click="blogPass" type="info" plain>通过</el-button>
-                        <el-button @click="blogrefuse" type="info" plain>拒绝</el-button>
+                        <el-button @click="blogPass(scope.row.id)" type="info" plain>通过</el-button>
+                        <el-button @click="blogrefuse(scope.row.id)" type="info" plain>拒绝</el-button>
                     </template>
                     <template v-else>
                         <el-button @click="blog" type="info" plain>查看</el-button>
@@ -39,30 +39,24 @@
                     topic:'题目',
                     topicTime:'2019.1.14',
                     createUser:'小明',
-                    state:false
+                    state:1
                 }]
             }
         },
         mounted(){
-            this.getBlog()
+            var id = this.$route.query.id
+            if(id==null){
+                id = 0
+            }
+            this.getBlog(id)
         },
         methods:{
-            getBlog() {  //
-                var id = this.$route.query.id
-                if(id==null){
-                    id = 0
-                }
+            getBlog(id) {  //
                 this.$axios.get(
-                    "http://localhost:8081/topic",
+                    "http://localhost:8081/admin/topic",
                      {params: {id: id}}
                 ).then(res =>{
-                    this.data=[{
-                        id:1,
-                        topic:'题目',
-                        topicTime:'2019.1.14',
-                        createUser:'小明',
-                        state:false
-                    }]
+                    this.data=res.data.data
                 })
                 .catch(error => {
                     if(error.response){
@@ -76,15 +70,49 @@
             manageBlogContent(id){
                 this.$router.push({ path: '/administrator/blogContentManagement', query: { id: id }});
             },
-            blogPass(){
+            blogPass(id){
+                this.$axios.get(
+                    "http://localhost:8081/admin/blogAuditing",
+                    {params: {id: id, state: 1}}
+                ).then(res =>{
+                    // list delete ----------todo
 
+                    this.$message({
+                            message:res.data.msg
+                        });
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
             },
-            blogrefuse(){
+            blogrefuse(id){
+                this.$axios.get(
+                    "http://localhost:8081/admin/blogAuditing",
+                    {params: {id: id, state: 2}}
+                ).then(res =>{
+                    // list delete ----------todo
 
+                    this.$message({
+                            message:res.data.msg
+                        });
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
             }
         },
         filters:{
-            stateFilter(state) {
+            stateFilter(state) {// ------------todo
                 if(state){
                     return "已审核";
                 }else{

@@ -1,31 +1,31 @@
 
 <template>
     <div class="content">
-        <el-card style="width:90%; margin:40px auto 0">
+        <el-card style="width:80%; margin:40px auto 0">
             <div class="content-header">
-                <h1>{{blog.topic}}</h1>
+                <h1>{{data.topic}}</h1>
             </div>
             <div style="margin-left:20px">
-                <h4>{{blog.createUser}}</h4>
-                <div>{{blog.topicTime}}</div>
+                <h4>{{data.createUser}}</h4>
+                <div>{{data.topicTime}}</div>
             </div>
-            <el-container v-for="comment in comments" v-bind:key="comment.id">
-                <el-header>
-                    <div>{{comment.user_name}}发表于{{comment.comment_time}}</div>
-                </el-header>
-                <el-main>
-                    <div>
-                        {{comment.comment_content}}
+            <!--<div style="padding:20px;">{{data.topicContents}}</div>-->
+            <mavon-editor v-model="data.topicContents" :subfield="false" :defaultOpen="state" :toolbarsFlag	="false"/>
+            <div class="pinglun">
+                评论
+            </div>
+            <div>
+                <div style="width:97%; background-color: #fafbfc; padding:20px; margin:0 auto">
+                    <div v-for="comment in data.comments_list" :key="comment">
+                        <div style="color: #8a9aa9" >{{comment.commentTime}}</div>
+                        <div style="margin-left:20px" >{{comment.commentContents}}</div>
+                        <div>
+                            <button @click="deleteComment(comment.commentId)">删除</button>
+                        </div>
                     </div>
-                </el-main>
-                <el-footer>
-                    <el-row>
-                        <el-col :span="4" :offset="20" left><el-button type="warning" @click="deleteComment(comment.id)" plain>删除</el-button></el-col>
-                    </el-row>
-                </el-footer>
-            </el-container>
+                </div>
+            </div>
         </el-card>
-        
     </div>
 </template>
 
@@ -33,58 +33,34 @@
     export default {
         data(){
             return{
-                blog:{
-
-                },
-                comments:[{
-                    id:1,
-                    user_name:'小明',
-                    comment_time:'2019.1.14',
-                    comment_content:"babbbababa",
-                },{
-                    id:1,
-                    user_name:'小明',
-                    comment_time:'2019.1.14',
-                    comment_content:"babbbababa",
-                }]
+                data:{
+                    id:this.$route.query.id,
+                    topic:'题目',
+                    topicTime:'2019.1.14',
+                    createUser:'小明',
+                    topicContents:".....",
+                    comments_list:[
+                        {
+                            commentId:1,
+                            commentContents:null,
+                            commentTime:null
+                        }
+                    ],
+                    input:"",
+                    user_data:localStorage.getItem("id")
+                }
             }
         },
         mounted(){
-            var id = this.$route.query.id
-            if(id==null){
-                id = 0
-            }
-            this.getBlog(id)
-            this.getComment(id)
+            this.getBlog()
         },
         methods:{
-            getBlog(id) {
+            getDetail(){
                 this.$axios.get(
                     "http://localhost:8081/detail",
-                    {params: {id: id}}
+                    {params: {id: this.data.id}}
                 ).then(res =>{
-                    this.blog=res.data.data
-                })
-                .catch(error => {
-                    if(error.response){
-                        this.$message({
-                            message:error.response.data.msg,
-                            type:"warning"
-                        });
-                    }
-                });
-            },
-            getComment(id) {  // 
-                this.$axios.get(
-                    "http://localhost:8081/comment",
-                     {params: {id: id}}
-                ).then(res =>{
-                    this.items = [{
-                            id:1,
-                            user_name:'小明',
-                            comment_time:'2019.1.14',
-                            comment_content:"babbbababa",
-                        }]
+                    this.data=res.data.data
                 })
                 .catch(error => {
                     if(error.response){
@@ -97,15 +73,23 @@
             },
             deleteComment(id){
                 // delete comment
-            }
-        },
-        filters:{
-            stateFilter(state) {
-                if(state){
-                    return "已审核";
-                }else{
-                    return "未审核";
-                }
+                this.$axios.get(
+                    "http://localhost:8081/admin/deleteComment",
+                    {params: {id: id}}
+                ).then(res =>{
+                    // ----------------todo
+                    this.$message({
+                            message:res.data.msg
+                        });
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
             }
         }
     }

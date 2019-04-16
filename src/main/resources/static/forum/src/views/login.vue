@@ -54,7 +54,7 @@ export default {
                       localStorage.setItem("token",result.data.data.token);
                       localStorage.setItem("id",result.data.data.id);
                       this.$store.commit("id",result.data.data.id);
-                      this.$store.commit("status", "administrator");
+                      this.$store.commit("status", result.data.data.status);
                       //this.$store.commit("status",re)
                       // 将Token存储到localStorage
                       this.$message({

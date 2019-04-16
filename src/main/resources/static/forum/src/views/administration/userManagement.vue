@@ -35,15 +35,6 @@
             checkBlogs(id) {
                 this.$router.push({ path: '/administrator/blogManagement', query: { id: id }});
             }
-        },
-        filters:{
-            stateFilter(state) {
-                if(state){
-                    return "已审核";
-                }else{
-                    return "未审核";
-                }
-            }
         }
     }
 </script>
