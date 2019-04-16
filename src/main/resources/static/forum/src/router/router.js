@@ -75,14 +75,9 @@ export default new Router({
           component:() => import('../views/administration/blogManagement'),
         },
         {
-          path:'commentManagement',
-          name:'commentManagement',
-          component:() => import('../views/informations/editMessage'),
-        },
-        {
           path:'userManagement',
           name:'userManagement',
-          component:() => import('../views/informations/editPassword'),
+          component:() => import('../views/administration/userManagement'),
         },
       ]
     }

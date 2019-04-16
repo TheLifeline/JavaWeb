@@ -79,7 +79,8 @@ export default {
             });
             this.$store.commit('status', null);
             this.$store.commit('id', 0)
-            localStorage.clear()
+            this.$router.push('/')
+            localStorage.clear()   
         },
         administartion(){
             this.$router.push('/administrator')

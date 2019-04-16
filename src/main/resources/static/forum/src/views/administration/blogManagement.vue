@@ -11,7 +11,7 @@
             <el-table-column prop="createUser" label="发表人" align="center"></el-table-column>
             <el-table-column prop="state" label="状态" align="center">
                 <div slot-scope="scope" >
-                    {{ scope.row.state | handler }}
+                    {{ scope.row.state | stateFilter }}
                 </div>
             </el-table-column>
             <el-table-column label="操作" align="center">
@@ -21,8 +21,7 @@
                         <el-button @click="blogrefuse" type="info" plain>拒绝</el-button>
                     </template>
                     <template v-else>
-                        <el-button @click="blog" type="info" plain>修改</el-button>
-                        <el-button @click="blog" type="info" plain>删除</el-button>
+                        <el-button @click="blog" type="info" plain>查看</el-button>
                     </template>
                 </div>
                 
@@ -41,18 +40,35 @@
                     topicTime:'2019.1.14',
                     createUser:'小明',
                     state:false
-                }],
-                id:localStorage.getItem("id")
+                }]
             }
         },
-        mounted (){
-            //this.getUserDetail()
+        mounted(){
+            this.getBlog()
         },
         methods:{
-            
+            getBlog() {
+                var id = this.$route.query.id
+
+                window.console.log(id)
+                this.data.data = [{
+                    id:1,
+                    topic:'题目',
+                    topicTime:'2019.1.14',
+                    createUser:'小明',
+                    state:false
+                },{
+                    id:2,
+                    topic:'题目',
+                    topicTime:'2019.1.15',
+                    createUser:'小明',
+                    state:false
+                }];
+                
+            }
         },
         filters:{
-            handler(state) {
+            stateFilter(state) {
                 if(state){
                     return "已审核";
                 }else{
