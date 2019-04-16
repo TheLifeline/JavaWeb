@@ -11,6 +11,7 @@ import web.school.demo.entity.User;
 import web.school.demo.repository.UserRepository;
 import web.school.demo.security.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -69,9 +70,12 @@ public class UserControl {
 
     @GetMapping("/islogin")
     @CrossOrigin
-    public ResponseEntity<?> isLogin(){
-        Boolean isLogin=true;
-        return new ResponseEntity<>(BaseResultFactory.build(isLogin),HttpStatus.OK);
+    public ResponseEntity<?> isLogin(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        HashMap<String,String> result=new HashMap<>();
+        result.put("id",JwtUtil.getIDbyToken(token));
+        result.put("status",JwtUtil.getRolebyToken(token));
+        return new ResponseEntity<>(BaseResultFactory.build(result),HttpStatus.OK);
     }
 
     @PostMapping("/user/login")
@@ -84,12 +88,13 @@ public class UserControl {
             String password=user_data.get("password");
             User user=userRepository.findUserByUserId(username,password);
             if (user!=null){
-                String token = JwtUtil.getToken(user.getNickName());
+                String token = JwtUtil.getToken(user.getId(),user.getStatus());
                 result.put("token",token);
                 result.put("id",user.getId().toString());
+                result.put("status",user.getStatus());
             }
             else {
-                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.NOT_FOUND.value(),"用户未注册！"), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.NOT_FOUND.value(),"用户未注册或用户名或密码错误！"), HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK);
         }catch (IOException e){

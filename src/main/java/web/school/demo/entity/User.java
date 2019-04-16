@@ -22,6 +22,17 @@ public class User {
         this.nickName = nickName;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Column(nullable = false)
+    private String status;
+
     @Column(nullable = false)
     private String nickName;
 
