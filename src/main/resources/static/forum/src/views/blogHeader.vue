@@ -8,6 +8,7 @@
                 <div class="header-r">
                     <template v-if="status===null">
                         <el-button @click="handleLogin">登录</el-button>
+                        <el-button @click="handleRegister">注册</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </template> 
                     <template v-else-if="status==='administrator'">
@@ -86,6 +87,9 @@ export default {
         },
         index(){
             this.$router.push('/')
+        },
+        handleRegister(){
+            this.$router.push('/register')
         }
     }
 }

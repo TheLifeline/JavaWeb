@@ -4,32 +4,30 @@
     <div style="margin:70px auto 0; width:40%;">
       <el-card>
         <el-form>
-          <el-form-item label="账号">
-            <el-input placeholder="请输入账号" v-model="user_data.username"></el-input>
-          </el-form-item>
-          <el-form-item label="密码">
-            <el-input
-              @keydown.native.enter="login"
-              placeholder="请输入密码"
-              type="password"
-              v-model="user_data.password"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-row>
-              <el-col :span="12">
-                <div style="width:40%; margin: 0 auto">
-                  <el-button style="width:100%;" type="primary" @click="login">登陆</el-button>
+            <el-form-item label="账号">
+                <el-input placeholder="请输入账号" v-model="user_data.username"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+                <el-input
+                @keydown.native.enter="login"
+                placeholder="请输入密码"
+                type="password"
+                v-model="user_data.password"
+                ></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码">
+                <el-input
+                @keydown.native.enter="login"
+                placeholder="请再次输入密码"
+                type="password"
+                v-model="user_data.rpassword"
+                ></el-input>
+            </el-form-item>
+            <el-form-item>
+                <div style="width:20%; margin: 0 auto">
+                    <el-button style="width:100%;" type="primary" @click="register">注册</el-button>
                 </div>
-              </el-col>
-              <el-col :span="12">
-                <div style="width:40%; margin: 0 auto">
-                  <el-button style="width:100%;" type="primary" @click="toRegister">注册</el-button>
-                </div>
-              </el-col>
-            </el-row>
-            
-          </el-form-item>
+            </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -38,25 +36,31 @@
 
 <script>
 export default {
-    name:'login',
+    name:'register',
     data() {
         return {
           user_data: {
             username: "",
-            password: ""
+            password: "",
+            rpassword:""
           },
         console:console
         };
     },
     methods: {
-        login() {
+        register() {
         // this.console.log("执行登录操作");
         if (!this.user_data.username.trim() || !this.user_data.password.trim())
             return this.$message({
             message: "请输入用户名或密码!",
             type: "warning"
             });
-
+        if (!this.user_data.password != this.user_data.rpassword)
+            return this.$message({
+            message: "两次密码不一致!",
+            type: "warning"
+            });
+        // todo
         return (
           this.$axios.post("http://localhost:8081/user/login",this.user_data)
                   .then(result => {
@@ -80,11 +84,7 @@ export default {
                       });
                     }
                   })
-        );
-        },
-        toRegister(){
-            this.$router.push('/register')
-        }
+        )}
     }
 };
 </script>
