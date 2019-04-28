@@ -44,11 +44,13 @@ public class adminController {
             try{
                 HashMap<String,String> data = new ObjectMapper().readValue(jsonParam,HashMap.class);
                 Integer id=Integer.valueOf(data.get("id"));
-                User user = userRepository.findById(id).get();
-                List<Map<String, String>> result =new ArrayList<>();
-                List<BSTopic> mid= user.getTopicList();
+                List<Map<String, String>> result = new ArrayList<>();
+                List<BSTopic> mid = null;
                 if(id.equals(0)){
-                    mid=topicRepository.findAll();
+                    mid = topicRepository.findAll();
+                }else {
+                	User user = userRepository.findById(id).get();
+                	mid = user.getTopicList();
                 }
                 for (BSTopic bsTopic : mid) {
                     Map<String, String> midMap = new HashMap<>();

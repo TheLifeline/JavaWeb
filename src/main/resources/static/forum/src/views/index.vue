@@ -27,8 +27,7 @@
                     topicTime:'2019.1.14',
                     createUser:'小明',
                     topicReplyCount:20
-                }],
-                console:console
+                }]
             }
         },
         mounted(){

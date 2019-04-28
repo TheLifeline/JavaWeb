@@ -1,3 +1,4 @@
+
 <template>
     <div class="content">
         <el-card style="width:80%; margin:40px auto 0">
@@ -15,11 +16,12 @@
             </div>
             <div>
                 <div style="width:97%; background-color: #fafbfc; padding:20px; margin:0 auto">
-                    <el-input placeholder="输入评论" v-model="data.input"></el-input>
-                    <div style="margin:20px 0"><el-button type="primary" @click="postComment">评论</el-button></div>
                     <div v-for="comment in data.comments_list" :key="comment">
                         <div style="color: #8a9aa9" >{{comment.commentTime}}</div>
                         <div style="margin-left:20px" >{{comment.commentContents}}</div>
+                        <div>
+                            <button @click="deleteComment(comment.id)">删除</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -29,11 +31,8 @@
 
 <script>
     export default {
-        name:'detail',
         data(){
-            return {
-                value: '',
-                state:"preview",
+            return{
                 data:{
                     id:this.$route.query.id,
                     topic:'题目',
@@ -42,24 +41,24 @@
                     topicContents:".....",
                     comments_list:[
                         {
+                            id:1,
                             commentContents:null,
                             commentTime:null
                         }
                     ],
                     input:"",
                     user_data:localStorage.getItem("id")
-                },
-                console:console
+                }
             }
         },
-        mounted (){
-            this.getDetail()
+        mounted(){
+            this.getBlog()
         },
         methods:{
             getDetail(){
-                this.$axios.get(
+                this.$axios.post(
                     "http://localhost:8081/detail",
-                    {params: {id: this.data.id}}
+                    {id: this.data.id}
                 ).then(res =>{
                     this.data=res.data.data
                 })
@@ -72,26 +71,25 @@
                     }
                 });
             },
-            postComment(){
-                this.$axios.post(
-                    "http://localhost:8081/comment",{
-                        "id":""+this.$route.query.id,
-                        "user_data":localStorage.getItem("id"),
-                        "input":this.data.input
-                    }
+            deleteComment(id){
+                // delete comment
+                this.$axios.get(
+                    "http://localhost:8081/admin/deleteComment",
+                    {params: {id: id}}
                 ).then(res =>{
+                    // ----------------todo
                     this.$message({
-                        message:res.data.msg
-                    });
-                    window.reload()
-                }).catch(error => {
-                        if(error.response){
-                            this.$message({
-                                message:error.response.data.msg,
-                                type:"warning"
-                            });
-                        }
-                    });
+                            message:res.data.msg
+                        });
+                })
+                .catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
             }
         }
     }

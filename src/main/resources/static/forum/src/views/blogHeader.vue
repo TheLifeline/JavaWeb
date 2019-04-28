@@ -11,7 +11,7 @@
                         <el-button @click="handleRegister">注册</el-button>
                         <el-button @click="postForum">发帖子</el-button>
                     </template> 
-                    <template v-else-if="status==='administrator'">
+                    <template v-else-if="status==='admin'">
                         <el-button @click="LoginOut">登出</el-button>
                         <el-button @click="administartion">管理页面</el-button>
                         <el-button @click="information">个人信息</el-button>
@@ -44,9 +44,9 @@ export default {
                 "http://localhost:8081/islogin"
             ).then(res => {
                 if(res.data.data){
-                    //this.$store.commit('id', res.data.id)
-                    this.$store.commit("id",res.data.id);
-                    this.$store.commit("status", "administrator");
+                    window.console.log(res.data.data)
+                    this.$store.commit("id",res.data.data.id);
+                    this.$store.commit("status", res.data.data.status);
                 } else {
                 this.$message({
                     message:res.data.msg,
@@ -80,7 +80,8 @@ export default {
             });
             this.$store.commit('status', null);
             this.$store.commit('id', 0)
-            localStorage.clear()
+            this.$router.push('/')
+            localStorage.clear()   
         },
         administartion(){
             this.$router.push('/administrator')
