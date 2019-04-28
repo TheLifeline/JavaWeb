@@ -106,16 +106,18 @@ public class UserControl {
     @PostMapping("/user/register")
     @CrossOrigin
     public ResponseEntity<?> userRegister(@RequestBody String jsonParam){
+    	LogFactory.getLog("test").info("test---");
         try{
             HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
             User user=new User();
             String username=user_data.get("username");
             String password=user_data.get("password");
             String email=user_data.get("email");
-            if(!checkNickName(username)){
+            User u = userRepository.findUserByNickName(username);
+            if(u!=null){
                 return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"用户名已使用！"),HttpStatus.BAD_REQUEST);
             }
-            if(!checkPassword(password)){
+            if(password.length()<8 || password.length()>15){
                 return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"长度不够"),HttpStatus.BAD_REQUEST);
             }
             user.setPassword(password);
@@ -130,18 +132,6 @@ public class UserControl {
             return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/user/retrievePassword")
-    @CrossOrigin
-    private boolean checkPassword(String password) {
-        if(password.length()<8 || password.length()>15){
-            return false;
-        }
-        return true;
-    }
 
-    private boolean checkNickName(String username) {
-        User user= userRepository.findUserByNickName(username);
-        return user==null;
-    }
 
 }

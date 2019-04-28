@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
   if (to.path == '/'){
     return next()
   }
-  if (!token && to.path !== '/login') {
+  if (!token && to.path !== '/login' && to.path !== '/register') {
     return next('/login')
   }
   next()
