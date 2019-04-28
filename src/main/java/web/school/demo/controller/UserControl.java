@@ -13,6 +13,7 @@ import web.school.demo.security.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 
@@ -86,7 +87,7 @@ public class UserControl {
             HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
             String username=user_data.get("username");
             String password=user_data.get("password");
-            User user=userRepository.findUserByUserId(username,password);
+            User user=userRepository.findUserByNickNameAndPassword(username,password);
             if (user!=null){
                 String token = JwtUtil.getToken(user.getId(),user.getStatus());
                 result.put("token",token);
@@ -101,4 +102,46 @@ public class UserControl {
             return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/user/register")
+    @CrossOrigin
+    public ResponseEntity<?> userRegister(@RequestBody String jsonParam){
+        try{
+            HashMap<String,String> user_data = new ObjectMapper().readValue(jsonParam,HashMap.class);
+            User user=new User();
+            String username=user_data.get("username");
+            String password=user_data.get("password");
+            String email=user_data.get("email");
+            if(!checkNickName(username)){
+                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"用户名已使用！"),HttpStatus.BAD_REQUEST);
+            }
+            if(!checkPassword(password)){
+                return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"长度不够"),HttpStatus.BAD_REQUEST);
+            }
+            user.setPassword(password);
+            user.setNickName(username);
+            user.setEmail(email);
+            user.setStatus("user");
+            user.setUserRegisterDate(new Timestamp(System.currentTimeMillis()));
+            userRepository.save(user);
+            return new ResponseEntity<>(BaseResultFactory.build(true), HttpStatus.OK);
+        }catch (IOException e)
+        {
+            return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/user/retrievePassword")
+    @CrossOrigin
+    private boolean checkPassword(String password) {
+        if(password.length()<8 || password.length()>15){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkNickName(String username) {
+        User user= userRepository.findUserByNickName(username);
+        return user==null;
+    }
+
 }
