@@ -61,11 +61,11 @@ public class TopicController {
             result.put("topicContents",bsTopic.getTopicContents());
             result.put("topicTime",bsTopic.getTopicTime().getTime());
             result.put("createUser",bsTopic.getUser().getNickName());
-            List<Map<String,Object>> CommentList=null;
+            List<Map<String,Object>> CommentList = new ArrayList<Map<String,Object>>();;
             List<Comment> l = bsTopic.getCommentList();
             for(int i=0; i<l.size();i++) {
             	Comment comment=l.get(i);
-            	Map<String,Object> mid=null;
+            	Map<String,Object> mid=new HashMap<String,Object>();
             	mid.put("id", comment.getId());
             	User u = comment.getUser();
             	mid.put("userName", u.getNickName());
@@ -98,7 +98,15 @@ public class TopicController {
             Integer count=bsTopic.getTopicReplyCount();
             bsTopic.setTopicReplyCount(count+1);
             topicRepository.saveAndFlush(bsTopic);
-            return new ResponseEntity<>(BaseResultFactory.build(true),HttpStatus.OK);
+            Map<String,Object> mid=new HashMap<String,Object>();
+            mid.put("id", comment.getId());
+        	User u = comment.getUser();
+        	mid.put("userName", u.getNickName());
+        	mid.put("userID", u.getId());
+        	mid.put("likeNum",comment.getLikeNums());
+        	mid.put("commentTime", comment.getCommentTime().getTime());
+        	mid.put("commentContent", comment.getCommentContents());
+            return new ResponseEntity<>(BaseResultFactory.build(mid),HttpStatus.OK);
         }catch (IOException e){
             return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"输入错误"),HttpStatus.BAD_REQUEST);
         }catch (Exception e)

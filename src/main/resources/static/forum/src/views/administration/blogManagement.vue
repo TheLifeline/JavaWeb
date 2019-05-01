@@ -120,7 +120,7 @@
             }
         },
         filters:{
-            stateFilter(state) {// ------------todo
+            stateFilter(state) {
                 if(state=="0"){
                     return "未审核";
                 }else if(state=="1"){

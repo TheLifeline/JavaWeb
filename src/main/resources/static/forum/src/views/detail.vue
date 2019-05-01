@@ -104,8 +104,7 @@
                     this.$message({
                         message:res.data.msg
                     });
-                    //this.data.comments_list.add(res.data.comment) todo
-                    window.reload()
+                    this.data.comments_list.unshift(res.data.data)
                 }).catch(error => {
                         if(error.response){
                             this.$message({
@@ -119,7 +118,7 @@
         filters: {
             timeHandler(t) {
                 var d = new Date(t);
-                return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+                return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"+d.getHours()+"点"+d.getMinutes()+"分";
             }
         }
     }

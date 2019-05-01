@@ -46,6 +46,7 @@ public class BSTopic {
     private User user;
     
     @OneToMany(mappedBy = "topic",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OrderBy(value = "comment_time desc")
     private List<Comment> commentList;
 
     public Integer getId() {
