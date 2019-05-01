@@ -52,7 +52,8 @@
                     this.$message({
                         message:res.data.msg
                     });
-                    window.reload()
+                    window.reload();
+                    this.$router.push('/');
                 }).catch(error => {
                     if(error.response){
                         this.$message({

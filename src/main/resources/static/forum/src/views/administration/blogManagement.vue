@@ -16,12 +16,12 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <div slot-scope="scope" >
-                    <template v-if="!scope.row.state">
+                    <template v-if="scope.row.state==='0'">
                         <el-button @click="blogPass(scope.row.id)" type="info" plain>通过</el-button>
                         <el-button @click="blogrefuse(scope.row.id)" type="info" plain>拒绝</el-button>
                     </template>
                     <template v-else>
-                        <el-button @click="blog" type="info" plain>查看</el-button>
+                        <el-button @click="manageBlogContent(scope.row.id)" type="info" plain>查看</el-button>
                     </template>
                 </div>
                 
@@ -51,7 +51,7 @@
             this.getBlog(id)
         },
         methods:{
-            getBlog(id) {  //
+            getBlog(id) {  
                 this.$axios.post(
                     "http://localhost:8081/admin/topic",
                     {id: id}
@@ -71,12 +71,16 @@
                 this.$router.push({ path: '/administrator/blogContentManagement', query: { id: id }});
             },
             blogPass(id){
-                this.$axios.get(
+                this.$axios.post(
                     "http://localhost:8081/admin/blogAuditing",
-                    {params: {id: id, state: 1}}
+                    {id: id, state: "1"}
                 ).then(res =>{
-                    // list delete ----------todo
-
+                    for(var i=0;i<this.data.length;i++){
+                        if(id == this.data[i].id){
+                            this.data[i].state = "1";
+                            break;
+                        }
+                    }
                     this.$message({
                             message:res.data.msg
                         });
@@ -91,11 +95,15 @@
                 });
             },
             blogrefuse(id){
-                this.$axios.get(
+                this.$axios.post(
                     "http://localhost:8081/admin/blogAuditing",
-                    {params: {id: id, state: 2}}
+                    {id: id, state: "2"}
                 ).then(res =>{
-                    // list delete ----------todo
+                    for(var i=0;i<this.data.length;i++){
+                        if(id == this.data[i].id){
+                            this.data[i].state = "2";
+                        }
+                    }
 
                     this.$message({
                             message:res.data.msg
@@ -113,10 +121,12 @@
         },
         filters:{
             stateFilter(state) {// ------------todo
-                if(state){
-                    return "已审核";
-                }else{
+                if(state=="0"){
                     return "未审核";
+                }else if(state=="1"){
+                    return "已通过";
+                }else{
+                    return "未通过";
                 }
             }
         }

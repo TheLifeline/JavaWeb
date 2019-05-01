@@ -29,12 +29,24 @@
             }
         },
         mounted (){
-            //this.getUserDetail() todo
+            this.getAllUser();
         },
         methods:{
             checkBlogs(id) {
-                this.$router.push({ path: '/administrator/blogManagement', query: { id: id }});
+                this.$router.push({ path: '/administrator/blogManagement', query: { id: id.toString() }});
             },
+            getAllUser() {
+                this.$axios.get('http://localhost:8081/admin/getAllUser').then(res => {
+                    this.data = res.data.data
+                }).catch(error => {
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                })
+            }
         }
     }
 </script>

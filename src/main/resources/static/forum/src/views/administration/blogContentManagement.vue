@@ -5,23 +5,43 @@
             <div class="content-header">
                 <h1>{{data.topic}}</h1>
             </div>
-            <div style="margin-left:20px">
-                <h4>{{data.createUser}}</h4>
-                <div>{{data.topicTime}}</div>
+            
+            <div>
+                <el-row type="flex" class="row-bg">
+                    <el-col :offset="16" :span="8"><div class="grid-content bg-purple">作者：{{data.createUser}}</div></el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :offset="16" :span="8"><div class="grid-content bg-purple">时间：{{data.topicTime | timeHandler}}</div></el-col>
+                </el-row>
             </div>
             <!--<div style="padding:20px;">{{data.topicContents}}</div>-->
-            <mavon-editor v-model="data.topicContents" :subfield="false" :defaultOpen="state" :toolbarsFlag	="false"/>
+            <mavon-editor v-model="data.topicContents" :subfield="false" :defaultOpen="'preview'" :toolbarsFlag	="false" :editable="false"/>
             <div class="pinglun">
                 评论
             </div>
             <div>
                 <div style="width:97%; background-color: #fafbfc; padding:20px; margin:0 auto">
-                    <div v-for="comment in data.comments_list" :key="comment">
-                        <div style="color: #8a9aa9" >{{comment.commentTime}}</div>
-                        <div style="margin-left:20px" >{{comment.commentContents}}</div>
-                        <div>
-                            <button @click="deleteComment(comment.id)">删除</button>
-                        </div>
+                    <div v-for="comment in data.comments_list" :key="comment.id">
+                        <el-row :align="'middle'">
+                            <el-col :span="6">
+                                <div class="comment-left">
+                                    <el-row>
+                                        <el-col :span="24"><div class="comment-title">用户名：{{comment.userName}}</div></el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="24"><div class="comment-like">点赞数：{{comment.likeNum}}</div></el-col>
+                                    </el-row>
+                                </div>
+                            </el-col>
+                            <el-col :span="18">
+                                <el-row>
+                                    <el-col :span="24"><div class="comment-content">{{comment.commentContent}}</div></el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="24"><div class="comment-time">发表于{{comment.commentTime | timeHandler}}</div></el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
                     </div>
                 </div>
             </div>
@@ -41,24 +61,26 @@
                     topicContents:".....",
                     comments_list:[
                         {
-                            id:1,
-                            commentContents:null,
-                            commentTime:null
+                            id:0,
+                            userID:1,
+                            userName:'wkz',
+                            commentContents:"",
+                            commentTime:"",
+                            likeNum:0,
                         }
                     ],
-                    input:"",
-                    user_data:localStorage.getItem("id")
+                    input:""
                 }
             }
         },
         mounted(){
-            this.getBlog()
+            this.getDetail()
         },
         methods:{
             getDetail(){
-                this.$axios.post(
-                    "http://localhost:8081/detail",
-                    {id: this.data.id}
+                this.$axios.get(
+                    "http://localhost:8081/admin/detail",
+                    {params: {id: this.data.id}}
                 ).then(res =>{
                     this.data=res.data.data
                 })
@@ -91,11 +113,46 @@
                     }
                 });
             }
+        },
+        filters: {
+            timeHandler(t) {
+                var d = new Date(t);
+                return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+            }
         }
     }
 </script>
 
 <style scoped>
+    .comment-left {
+        margin: auto auto;
+        height: 120px
+    }
+    .comment-title {
+        font-family:微软雅黑;
+        font-size: 18px;
+        text-align: center;
+        line-height: 93px;
+        height: 60px;
+    }
+    .comment-like {
+        font-family:微软雅黑;
+        font-size: 12px;
+        text-align: center;
+        height: 60px;
+    }
+    .comment-content {
+        font-family:微软雅黑; 
+        font-size: 16px;
+        min-height: 100px;
+        text-indent:32px;
+    }
+    .comment-time {
+        text-align: right;
+        margin-right: 5%;
+        font-size: 12px;
+        min-height: 20px;
+    }
     .content{
         background-color: #f1f1f1;
         padding: 20px 0;

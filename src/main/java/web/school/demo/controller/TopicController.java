@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import web.school.demo.comment.dto.BaseResultFactory;
 import web.school.demo.entity.BSTopic;
 import web.school.demo.entity.Comment;
+import web.school.demo.entity.User;
 import web.school.demo.repository.CommentRepository;
 import web.school.demo.repository.TopicRepository;
 import web.school.demo.repository.UserRepository;
@@ -58,9 +59,23 @@ public class TopicController {
             result.put("topic", bsTopic.getTopic());
             result.put("likeNums",bsTopic.getLikeNums().toString());
             result.put("topicContents",bsTopic.getTopicContents());
-            result.put("topicTime",bsTopic.getTopicTime().toString());
+            result.put("topicTime",bsTopic.getTopicTime().getTime());
             result.put("createUser",bsTopic.getUser().getNickName());
-            result.put("comments_list",bsTopic.getCommentList());
+            List<Map<String,Object>> CommentList=null;
+            List<Comment> l = bsTopic.getCommentList();
+            for(int i=0; i<l.size();i++) {
+            	Comment comment=l.get(i);
+            	Map<String,Object> mid=null;
+            	mid.put("id", comment.getId());
+            	User u = comment.getUser();
+            	mid.put("userName", u.getNickName());
+            	mid.put("userID", u.getId());
+            	mid.put("likeNum",comment.getLikeNums());
+            	mid.put("commentTime", comment.getCommentTime().getTime());
+            	mid.put("commentContent", comment.getCommentContents());
+            	CommentList.add(mid);
+            }
+            result.put("comments_list",CommentList);
             return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
         }else{
             return new ResponseEntity<>(BaseResultFactory.build(HttpStatus.BAD_REQUEST.value(),"请求有误！"),HttpStatus.BAD_REQUEST);

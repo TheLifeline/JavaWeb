@@ -6,10 +6,10 @@
             </div>
             <div style="margin-left:20px">
                 <h4>{{data.createUser}}</h4>
-                <div>{{data.topicTime}}</div>
+                <div>{{data.topicTime | timeHandler}}</div>
             </div>
             <!--<div style="padding:20px;">{{data.topicContents}}</div>-->
-            <mavon-editor v-model="data.topicContents" :subfield="false" :defaultOpen="state" :toolbarsFlag	="false"/>
+            <mavon-editor v-model="data.topicContents" :subfield="false" :defaultOpen="'preview'" :toolbarsFlag	="false"/>
             <div class="pinglun">
                 评论
             </div>
@@ -17,9 +17,27 @@
                 <div style="width:97%; background-color: #fafbfc; padding:20px; margin:0 auto">
                     <el-input placeholder="输入评论" v-model="data.input"></el-input>
                     <div style="margin:20px 0"><el-button type="primary" @click="postComment">评论</el-button></div>
-                    <div v-for="comment in data.comments_list" :key="comment">
-                        <div style="color: #8a9aa9" >{{comment.commentTime}}</div>
-                        <div style="margin-left:20px" >{{comment.commentContents}}</div>
+                    <div v-for="comment in data.comments_list" :key="comment.id">
+                        <el-row :align="'middle'">
+                            <el-col :span="6">
+                                <div class="comment-left">
+                                    <el-row>
+                                        <el-col :span="24"><div class="comment-title">用户名：{{comment.userName}}</div></el-col>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="24"><div class="comment-like">点赞数：{{comment.likeNum}}</div></el-col>
+                                    </el-row>
+                                </div>
+                            </el-col>
+                            <el-col :span="18">
+                                <el-row>
+                                    <el-col :span="24"><div class="comment-content">{{comment.commentContent}}</div></el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="24"><div class="comment-time">发表于{{comment.commentTime | timeHandler}}</div></el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
                     </div>
                 </div>
             </div>
@@ -42,8 +60,11 @@
                     topicContents:".....",
                     comments_list:[
                         {
-                            commentContents:null,
-                            commentTime:null
+                            id:0,
+                            userID:1,
+                            userName:'wkz',
+                            commentContents:"",
+                            commentTime:""
                         }
                     ],
                     input:"",
@@ -83,6 +104,7 @@
                     this.$message({
                         message:res.data.msg
                     });
+                    //this.data.comments_list.add(res.data.comment) todo
                     window.reload()
                 }).catch(error => {
                         if(error.response){
@@ -93,11 +115,46 @@
                         }
                     });
             }
+        },
+        filters: {
+            timeHandler(t) {
+                var d = new Date(t);
+                return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+            }
         }
     }
 </script>
 
 <style scoped>
+    .comment-left {
+        margin: auto auto;
+        height: 120px
+    }
+    .comment-title {
+        font-family:微软雅黑;
+        font-size: 18px;
+        text-align: center;
+        line-height: 93px;
+        height: 60px;
+    }
+    .comment-like {
+        font-family:微软雅黑;
+        font-size: 12px;
+        text-align: center;
+        height: 60px;
+    }
+    .comment-content {
+        font-family:微软雅黑; 
+        font-size: 16px;
+        min-height: 100px;
+        text-indent:32px;
+    }
+    .comment-time {
+        text-align: right;
+        margin-right: 5%;
+        font-size: 12px;
+        min-height: 20px;
+    }
     .content{
         background-color: #f1f1f1;
         padding: 20px 0;
