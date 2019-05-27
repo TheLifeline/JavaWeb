@@ -1,5 +1,9 @@
 <template>
     <el-card style="width:81%; margin:40px auto 0">
+        <div style="margin-bottom: 20px; display:flex">
+            <el-input style="width:300px; margin-right: 20px" v-model="searchData"></el-input>
+            <el-button type="primary" @click="search">搜索</el-button>
+        </div>
         <el-table width="80%" :data="data" border>
             <el-table-column type='index' width="50" align="center"></el-table-column>
             <el-table-column label="标题" align="center">
@@ -27,7 +31,8 @@
                     topicTime:'2019.1.14',
                     createUser:'小明',
                     topicReplyCount:20
-                }]
+                }],
+                searchData:'', //搜索内容
             }
         },
         mounted(){
@@ -40,18 +45,21 @@
                 ).then(res =>{
                     this.data=res.data.data
                 })
-                .catch(error => {
-                    if(error.response){
-                        this.$message({
-                            message:error.response.data.msg,
-                            type:"warning"
-                        });
-                    }
-                });
+                    .catch(error => {
+                        if(error.response){
+                            this.$message({
+                                message:error.response.data.msg,
+                                type:"warning"
+                            });
+                        }
+                    });
             },
             handleTitle(id) {
                 this.$router.push({ path: '/detail', query: { id: id }});
-            }
+            },
+            search(){
+                console.log('点击搜索，调接口');
+            },
         }
     }
 </script>

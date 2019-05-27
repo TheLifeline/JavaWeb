@@ -2,7 +2,7 @@
     <el-card style="width:95%; margin:40px auto 0">
         <el-table width="80%" :data="data" border>
             <el-table-column type='index' width="50" align="center"></el-table-column>
-            <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
+            <el-table-column prop="nickName" label="昵称" align="center"></el-table-column>
             <el-table-column prop="name" label="姓名" align="center"></el-table-column>
             <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
             <el-table-column prop="school" label="学校" align="center"></el-table-column>
@@ -21,7 +21,7 @@
             return{
                 data:[{
                     id:1,
-                    nickname:"xiaoming",
+                    nickName:"xiaoming",
                     name:'小明',
                     email:'123@qq.com',
                     school:'buaa'

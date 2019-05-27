@@ -47,12 +47,12 @@
                         "title":this.data.title,
                         "value":this.data.value,
                         "user_data":localStorage.getItem("id")
-                }
+                    }
                 ).then(res =>{
                     this.$message({
                         message:res.data.msg
                     });
-                    window.reload();
+                    // window.reload();
                     this.$router.push('/');
                 }).catch(error => {
                     if(error.response){
@@ -82,13 +82,13 @@
                         });
                     }
                 }).catch(error => {
-                        if(error.response){
-                            this.$message({
-                                message:error.response.data.msg,
-                                type:"warning"
-                            });
-                        }
-                    });
+                    if(error.response){
+                        this.$message({
+                            message:error.response.data.msg,
+                            type:"warning"
+                        });
+                    }
+                });
             },
             LoginOut(){
                 this.$message({
