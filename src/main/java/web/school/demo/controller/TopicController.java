@@ -50,6 +50,27 @@ public class TopicController {
         return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
     }
 
+
+    @CrossOrigin
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam("searchData") String searchData){
+        List<Map<String, String>> result =new ArrayList<>();
+        List<BSTopic> mid= topicRepository.searchdata("%"+searchData+"%");
+        for (BSTopic bsTopic : mid) {
+            if(bsTopic.getTopicState().equals(1)){
+                Map<String, String> midMap = new HashMap<>();
+                midMap.put("id", bsTopic.getId().toString());
+                midMap.put("topic", bsTopic.getTopic());
+                midMap.put("likeNums",bsTopic.getLikeNums().toString());
+                midMap.put("topicTime",bsTopic.getTopicTime().toString());
+                midMap.put("createUser",bsTopic.getUser().getNickName());
+                midMap.put("topicReplyCount",bsTopic.getTopicReplyCount().toString());
+                result.add(midMap);
+            }
+        }
+        return new ResponseEntity<>(BaseResultFactory.build(result), HttpStatus.OK) ;
+    }
+
     @CrossOrigin
     @GetMapping("/detail")
     public ResponseEntity<?> getDetail(@RequestParam("id") Integer id){

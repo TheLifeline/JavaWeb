@@ -59,6 +59,19 @@
             },
             search(){
                 console.log('点击搜索，调接口');
+                this.$axios.get(
+                    "http://localhost:8081/search",
+                    {params: {searchData: this.searchData}}
+                ).then(res =>{
+                    this.data=res.data.data
+                }).catch(error => {
+                        if(error.response){
+                            this.$message({
+                                message:error.response.data.msg,
+                                type:"warning"
+                            });
+                        }
+                    });
             },
         }
     }
