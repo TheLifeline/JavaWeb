@@ -58,7 +58,7 @@
                 this.$router.push({ path: '/detail', query: { id: id }});
             },
             search(){
-                console.log('点击搜索，调接口');
+                //console.log('点击搜索，调接口');
                 this.$axios.get(
                     "http://localhost:8081/search",
                     {params: {searchData: this.searchData}}

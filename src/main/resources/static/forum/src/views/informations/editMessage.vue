@@ -3,7 +3,7 @@
         <el-card>
             <el-form>
                 <el-form-item label="姓名:">
-                    <el-input v-model="data.userName"></el-input>
+                    <el-input v-model="data.name"></el-input>
                 </el-form-item>
                 <el-form-item label="学校:">
                     <el-input v-model="data.school"></el-input>
@@ -28,7 +28,7 @@
         data(){
             return{
                 data:{
-                    userName:'',
+                    name:'',
                     school:'',
                     major:'',
                     number:'',
@@ -37,12 +37,29 @@
                 id:localStorage.getItem("id")
             }
         },
+        mounted (){
+            this.getUserDetail()
+        },
         methods:{
+            getUserDetail(){
+                this.$axios.get(
+                    "http://localhost:8081/user/info"
+                ).then(res =>{
+                    this.data=res.data.data;
+                }).catch(error => {
+                        if(error.response){
+                            this.$message({
+                                message:error.response.data.msg,
+                                type:"warning"
+                            });
+                        }
+                    });
+            },
             postUserDetail(){
                 this.$axios.post(
                     "http://localhost:8081/user",
                     {
-                        "userName":this.data.userName,
+                        "name":this.data.name,
                         "school":this.data.school,
                         "major":this.data.major,
                         "number":this.data.number,

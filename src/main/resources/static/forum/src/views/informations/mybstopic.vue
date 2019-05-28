@@ -1,24 +1,21 @@
 <template>
     <div>
-        <el-card>
-            <el-form>
-                <el-form-item label="姓名:">
-                    <span>{{data.name}}</span>
-                </el-form-item>
-                <el-form-item label="学校:">
-                    <span>{{data.school}}</span>
-                </el-form-item>
-                <el-form-item label="专业:">
-                    <span>{{data.major}}</span>
-                </el-form-item>
-                <el-form-item label="学号:">
-                    <span>{{data.number}}</span>
-                </el-form-item>
-                <el-form-item label="简介:">
-                    <el-input type="textarea" v-model="data.userStatement" readonly></el-input>
-                </el-form-item>
-            </el-form>
-            <!-- <el-button @click="handleAdd" type="primary">确认添加</el-button> -->
+        <el-card style="width:95%; margin:40px auto 0">
+            <el-table width="80%" :data="data" border>
+                <el-table-column type='index' width="50" align="center"></el-table-column>
+                <el-table-column label="标题" align="center">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="manageBlogContent(scope.row.id)">{{scope.row.topic}}</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="topicTime" label="发表时间" align="center"></el-table-column>
+                <el-table-column prop="createUser" label="发表人" align="center"></el-table-column>
+                <el-table-column prop="state" label="状态" align="center">
+                    <div slot-scope="scope" >
+                        {{ scope.row.state | stateFilter }}
+                    </div>
+                </el-table-column>
+            </el-table>
         </el-card>
     </div>
 </template>
@@ -27,14 +24,12 @@
     export default {
         data(){
             return{
-                data:{
-                    name:'小明',
-                    school:'家里蹲',
-                    major:'无业游民',
-                    number:'123456789',
-                    userStatement:'这是简述!!!!!!!!',
-                },
-                id:localStorage.getItem("id")
+                data:[{
+                    id:1,
+                    topic:'题目',
+                    topicTime:'2019.1.14',
+                    createUser:'小明',
+                }]
             }
         },
         mounted (){
@@ -43,12 +38,10 @@
         methods:{
             getUserDetail(){
                 this.$axios.get(
-                    "http://localhost:8081/user",
-                    {params: {id: this.id}}
+                    "http://localhost:8081/user/topic",
                 ).then(res =>{
                     this.data=res.data.data
-                })
-                    .catch(error => {
+                }).catch(error => {
                         if(error.response){
                             this.$message({
                                 message:error.response.data.msg,
@@ -56,6 +49,17 @@
                             });
                         }
                     });
+            }
+        },
+        filters:{
+            stateFilter(state) {
+                if(state=="0"){
+                    return "未审核";
+                }else if(state=="1"){
+                    return "已通过";
+                }else{
+                    return "未通过";
+                }
             }
         }
     }

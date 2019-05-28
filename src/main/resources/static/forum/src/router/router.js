@@ -64,11 +64,7 @@ export default new Router({
         {
           path:'mybstopic',
           component:() => import('../views/informations/mybstopic'),
-        },
-        {
-          path:'myComment',
-          component:() => import('../views/informations/myComment'),
-        },
+        }
       ]
     },
     {
